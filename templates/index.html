@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h3>File Uploader</h3>
+    <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+
+        <strong>Files:</strong><br>
+        <input id="file-picker" type="file" name="file" accept=".jpg,.jpeg,.png,.jfif,.HEIC,.mp4,.wmv,.flv,.mov,.avi" multiple>
+        <!--<div id="msg"></div>-->
+        <input type="submit" value="Upload!" id="upload-button">
+    </form>
+
+    <hr>
+    <!--<form action="/TEST_COLOR/RED" method="POST">
+        <button name="redbtn" type="submit" value="red" style="height:100px; width:100px;background-image: linear-gradient(to right, #802000 0%, #a03000 51%, #f00000 100%)" >Red</button>
+    </form>
+    <form action="/TEST_COLOR/GREEN" method="POST">
+        <button name="greenbtn" type="submit" value="green" style="height:100px; width:100px;background-image: linear-gradient(to right, #008000 0%, #00a000 51%, #00f000 100%)" >Green</button>
+    </form>
+    <form action="/TEST_COLOR/BLUE" method="POST">
+        <button name="bluebtn" type="submit" value="blue" style="height:100px; width:100px;background-image: linear-gradient(to right, #002080 0%, #0030a0 51%, #0000f0 100%)">Blue</button>
+    </form>
+    <form action="/TEST_COLOR/WHITE" method="POST">
+        <button name="whitebtn" type="submit" value="white" style="height:100px; width:100px">White</button>
+    </form>
+    <form action="/get_filelist" method="GET">
+        <button name="getfilelistbtn" type="submit" value="et_filelist" style="height:100px; width:100px">GetFileList</button>
+    </form>-->
+    <!--<h1> Video Streaming </h1>
+    <img src="{{ url_for('video_feed') }}">-->
+    <hr>
+    <h3>Files on Zaku Server
+        <form action="/playall" method="GET">
+        <button name="playall" type="submit" value="playall" style="height:100px; width:100px">playall</button>
+    </form>
+    </h3>
+
+    <thead>
+        <!--<tr><th>File Name </th><th class="number">Size MB</th></tr>-->
+    </thead>
+    <tbody>
+        {% for k,v in files.items() %}
+            <p>
+            <tr><td>
+                <form action="/play/{{k}}" method="GET">
+                    <button type="submit" style="float: left;" width="400" height="488"><img src="./get_thumbnail/{{k}}"></button>
+                </form>
+                <!--
+                <a href="/play/{{k}}"><img src="./get_thumbnail/{{k}}" style="float: left;" width="400" height="488">
+                -->
+                </td>
+            </p>
+        {% endfor %}
+    </tbody>
+{% endblock %}
+
