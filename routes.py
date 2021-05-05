@@ -1,98 +1,123 @@
 import os
 import glob
-from main import app#, send_message
+from main import app
+from qlocalmessage import send_message
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for, Response, json
 from global_def import *
 import traceback
+from flask_wtf import Form
+from wtforms import validators, RadioField, SubmitField, IntegerField
+import jlog
+log = jlog.logging_init("flask_plugin")
+import os
+SECRET_KEY = os.urandom(32)
+app.config['SECRET_KEY'] = SECRET_KEY
 
+led_color = "test_color:RED"
+led_num_option = 'led_num_all'
+br_value = 64
+led_select = 3
+def get_led_num_default():
+    print("in get_led_num_default, led_num_option:", led_num_option)
+    if led_num_option is not None:
 
+        return led_num_option
+    else:
+        log.error("no led num option")
 
+    return 'led_num_all'
 
-def find_maps():
-    maps = {}
-    #print("type(maps) :", type(maps))
-    for fname in sorted(glob.glob(mp4_extends)):
-        if os.path.isfile(fname):
-            key = fname
-            maps[key] = round(os.path.getsize(fname) / SIZE_MB, 3)
-    #print("maps :", maps)
+class TestForm(Form ):
 
-    return maps
-
-def get_nest_maps(maps):
-    dict_list = []
-    for x in maps:
-        fl_dic = {}
-        try:
-            print("x: ", x)
-            fl_dic["filename"] = x
-            fl_dic["size"] = maps[x]
-        except:
-            print(traceback.print_exc())
-        dict_list.append(fl_dic)
-    print("nest_dict :", dict_list)
-    return dict_list
+    color_switcher = RadioField(
+        'led_num',
+        [validators.Required()],
+        choices=[('test_color:RED', 'RED'), ('test_color:GREEN', 'GREEN'), ('test_color:BLUE', 'BLUE'), ('test_color:WHITE', 'WHITE')], default=led_color
+    )
+    led_num_default = get_led_num_default()
+    print("in TestForm, led_num_default:", led_num_default)
+    led_brightness_fields = IntegerField(label="Led Brightness:",validators=[
+                validators.Required(),
+                validators.NumberRange(min=0, max=255)
+            ], default=br_value)
+    choice_switcher = RadioField(
+        'led_num',
+        [validators.Required()],
+        choices=[('led_num_all', 'ALL'), ('led_num_single', 'SINGLE')], default=led_num_default
+    )
+    led_select_fields = IntegerField(label="Led Num:", validators=[
+        validators.Required(),
+        validators.NumberRange(min=1, max=961)
+    ], default=led_select)
+    submit = SubmitField('Submit')
 
 @app.route("/")
 def index():
-    maps = find_maps()
-    return render_template("index.html", title=title, files=maps)
+    testform = TestForm()
+    return render_template("index.html", title=title, br=64, form=testform)
 
-@app.route("/upload", methods=['POST', 'GET'])
-def upload():
-    print("upload")
-    if request.method == 'POST':
-        for file in request.files.getlist("file"):
-            print(file)
-            filename = file.filename
-            dest = "/".join([FileFolder, filename])
-            file.save(dest)
 
-    #return index()
-    #maps = find_maps()
-    return redirect(url_for('index'))
-
-@app.route('/download/<filename>')
-def download(filename):
-    fname = filename
-    return send_from_directory(FileFolder, fname, as_attachment=True)
-
-@app.route('/get_thumbnail/<filename>')
-def route_get_thumbnail(filename):
-    #print("route thumbnail")
-    fname = filename.replace(".mp4", ".gif")
-    return send_from_directory(FileFolder + ThumbnailFileFolder, fname, as_attachment=True)
-
-@app.route('/play/<filename>')
-def play(filename):
-    print("route play filename :", filename)
-    fname = filename
-    send_message(play_file=fname)
-    return redirect(url_for('index'))
-
-@app.route('/playall', methods=['POST', 'GET'])
-def playall():
-    send_message(playall='playall')
-    return redirect(url_for('index'))
 
 @app.route("/TEST_COLOR/RED", methods=['POST', 'GET'])
 def TEST_COLOR_RED():
-    return redirect(url_for('index'))
+    send_message(color_switch="test_color:RED")
+    #return redirect(url_for('index'))
+    testform = TestForm()
+    testform.validate_on_submit()
+    return render_template("index.html", title=title, form=testform)
 
 @app.route("/TEST_COLOR/GREEN", methods=['POST', 'GET'])
 def TEST_COLOR_GREEN():
-
+    send_message(color_switch="test_color:GREEN")
     return redirect(url_for('index'))
 
 @app.route("/TEST_COLOR/BLUE", methods=['POST', 'GET'])
 def TEST_COLOR_BLUE():
-
+    send_message(color_switch="test_color:BLUE")
     return redirect(url_for('index'))
 
 @app.route("/TEST_COLOR/WHITE", methods=['POST', 'GET'])
 def TEST_COLOR_WHITE():
-
+    send_message(color_switch="test_color:WHITE")
     return redirect(url_for('index'))
+
+@app.route("/BR_ADJUST", methods=['POST', 'GET'])
+def BR_ADJUST():
+    global br_value
+    br_value = request.form["br_slider"]
+    send_message(set_br="br_value:" + br_value)
+    testform = TestForm()
+    return render_template("index.html", title=title, br=br_value, form=testform)
+
+@app.route("/LED_NUM", methods=['POST', 'GET'])
+def LED_NUM():
+    global led_color
+    global led_num_option
+    global led_select
+    global br_value
+    list_led_color = request.form.getlist('color_switcher')
+    led_color = list_led_color[0]
+    send_message(color_switch=led_color)
+
+    list_led_num_option = request.form.getlist('choice_switcher')
+    led_num_option = list_led_num_option[0]
+
+    list_br_value = request.form.getlist('led_brightness_fields')
+    br_value = list_br_value[0]
+
+    list_led_select = request.form.getlist('led_select_fields')
+    led_select = list_led_select[0]
+
+
+    send_message(set_br="br_value:" + br_value)
+    if 'all' in led_num_option[0]:
+        send_message(led_num="led_num:" + led_num_option)
+    else:
+        send_message(led_num="led_num:" + led_num_option + ",led_select:"+ led_select)
+
+
+    testform = TestForm()
+    return render_template("index.html",title=title, form=testform)
 
 def gen(video):
     """视频流生成函数"""
@@ -108,34 +133,10 @@ def video_feed():
     #                mimetype='multipart/x-mixed-replace; boundary=frame')
     return
 
-@app.route('/get_filelist', methods=['POST', 'GET'])
-def get_filelist():
-    files_maps = find_maps()
-    nest_files_maps = get_nest_maps(files_maps)
-
-    response = app.response_class(
-        response=json.dumps(nest_files_maps),
-        status=200,
-        mimetype='application/json'
-    )
-    return response
 
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 def route_test():
     print("route test!")
-
-#@app.after_request
-#def add_header(r):
-#    print("add_header for disable cache")
-    """
-    Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also to cache the rendered page for 10 minutes.
-    """
-#    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-#    r.headers["Pragma"] = "no-cache"
-#    r.headers["Expires"] = "0"
-#    r.headers['Cache-Control'] = 'public, max-age=0'
-#    return r
 

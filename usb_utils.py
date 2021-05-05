@@ -1,6 +1,7 @@
 import usb.core
 import usb.util
-
+import jlog
+log = jlog.logging_init("usb_utils")
 pico_vid = 0x0000
 pico_pid = 0x0001
 """
@@ -11,9 +12,8 @@ return : pico devices
 def find_pico():
     # find our device
     devs = list(usb.core.find( find_all=True, idVendor=pico_vid, idProduct=pico_pid))
-    #devs = usb.core.find(idVendor=0x0000, idProduct=0x0001)
-    #print("number of pico :", len(devs))
 
+    #log.debug("find_pico")
     # was it found?
     if devs is None:
         raise ValueError('Device not found')

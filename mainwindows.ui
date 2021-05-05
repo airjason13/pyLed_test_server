@@ -114,6 +114,19 @@
       <string>LED Brightness Level</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_slider_value">
+     <property name="geometry">
+      <rect>
+       <x>260</x>
+       <y>200</y>
+       <width>57</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="label_pico_num">
     <property name="geometry">

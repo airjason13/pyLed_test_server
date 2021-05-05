@@ -5,8 +5,13 @@ from PyQt5.QtWidgets import QLabel, QRadioButton
 from UI.mainwindows import Ui_MainWindow
 import usb_utils as usb_utils
 from pyqt_worker import *
+import jlog
+import sys
+import logging
+log = jlog.logging_init("MainWindow")
 
-class MainWindow(QtWidgets.QMainWindow):
+
+class MainWindow(QtWidgets.QMainWindow ):
     def __init__(self):
         super(MainWindow, self).__init__()
 
@@ -15,18 +20,20 @@ class MainWindow(QtWidgets.QMainWindow):
 
         #self._timer = QTimer(self)
         #self._timer.timeout.connect(self.play)
-
+        #log = jlog.logging_init("MainWindow")
+        log.debug("This is MainWindow")
         self.ui.radioButton_color_red.toggled.connect(self.onRedClicked)
         self.ui.radioButton_color_green.toggled.connect(self.onGreenClicked)
-
-
         self.ui.radioButton_color_blue.toggled.connect(self.onBlueClicked)
         self.ui.radioButton_color_white.toggled.connect(self.onWhiteClicked)
+        self.ui.radioButton_color_red.click()
         self.ui.verticalSlider.setMinimum(0)
         self.ui.verticalSlider.setMaximum(255)
         self.ui.verticalSlider.sliderReleased.connect(self.onVerticalSlideRelease)
         self.ui.verticalSlider.sliderMoved.connect(self.onVerticalSlideMoved)
-
+        self.ui.label_slider_value.setText("64")
+        self.ui.verticalSlider.setValue(64)
+        self.ui.textEdit_ledbrilevel.setText("64")
         self.ui.textEdit_ledbrilevel.textChanged.connect(self.ontextChanged)
 
         self.ui.radioButton_all.toggled.connect(self.onradiobuttonAllClicked)
@@ -38,7 +45,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.textEdit_led_single.textChanged.connect(self.onledsingleTextChanged)
 
         self.picos = usb_utils.find_pico()
-        print("we got %s picos" % len(self.picos))
+        ("we got %s picos" % len(self.picos))
         if len(self.picos) is not 0:
             self.ui.label_pico_num.setText(str(len(self.picos)) + " controller online")
 
@@ -82,16 +89,18 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.textEdit_led_single.setReadOnly(False)
 
     def ontextChanged(self):
-
+        print("ontextChanged")
         if self.ui.textEdit_ledbrilevel.toPlainText() is not '':
             self.ui.verticalSlider.setValue(int(self.ui.textEdit_ledbrilevel.toPlainText()))
+            self.ui.label_slider_value.setText(self.ui.textEdit_ledbrilevel.toPlainText())
         else:
             self.ui.verticalSlider.setValue(0)
 
     def onVerticalSlideMoved(self):
         print("onVerticalSlide")
         print("", self.ui.verticalSlider.value())
-        self.ui.textEdit_ledbrilevel.setText(str(self.ui.verticalSlider.value()))
+        value_str = str(self.ui.verticalSlider.value())
+        self.ui.label_slider_value.setText(value_str)
 
     def onVerticalSlideRelease(self):
         print("onVerticalSlide")
@@ -101,27 +110,61 @@ class MainWindow(QtWidgets.QMainWindow):
     def onRedClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
-            print("Red")
+            log.debug("Red")
 
     def onBlueClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
-            print("Blue")
+            log.debug("Blue")
 
     def onGreenClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
-            print("Green")
+            log.debug("Green")
 
     def onWhiteClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
-            print("White")
+            log.debug("White")
 
     def closeEvent(self, event):
-        print("closeEvent")
-        """server.removeServer(server.fullServerName())"""
+        log.debug("closeEvent")
+        #server.removeServer(server.fullServerName())
 
     def __del__(self):
-        print("Main window del")
-        """server.removeServer(server.fullServerName())"""
+        log.debug("Main window del")
+        #server.removeServer(server.fullServerName())
+
+    def data_from_route(self, data):
+        log.debug(sys._getframe().f_code.co_name)
+        log.debug("data : %s", data)
+        """parser color_switch"""
+        if data.get('color_switch') is not None:
+            log.debug(data.get('color_switch'))
+            if "RED" in data.get('color_switch'):
+                self.ui.radioButton_color_red.click()
+            elif "GREEN" in data.get('color_switch'):
+                self.ui.radioButton_color_green.click()
+            elif "BLUE" in data.get('color_switch'):
+                self.ui.radioButton_color_blue.click()
+            elif "WHITE" in data.get('color_switch'):
+                self.ui.radioButton_color_white.click()
+        if data.get("led_num") is not None:
+            log.debug(data.get('led_num'))
+            ori_str = data.get('led_num')
+            list_ori_str = ori_str.split(",")
+            """handle the led_num all first"""
+            if 'all' in list_ori_str[0]:
+                self.ui.radioButton_all.click()
+            else:
+                self.ui.radioButton_single.click()
+                led_select_str = list_ori_str[1].split(":")
+                print("led_select_str:", led_select_str)
+                self.ui.textEdit_led_single.setText(led_select_str[1])
+
+        if data.get("set_br") is not None:
+            ori_str = data.get('set_br')
+            list_ori_str = ori_str.split(":")
+            br_str = list_ori_str[1]
+            self.ui.verticalSlider.setValue(int(br_str))
+            self.ui.textEdit_ledbrilevel.setText(br_str)
