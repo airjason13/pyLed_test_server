@@ -22,6 +22,16 @@ class MainWindow(QtWidgets.QMainWindow ):
         #self._timer.timeout.connect(self.play)
         #log = jlog.logging_init("MainWindow")
         log.debug("This is MainWindow")
+        self.picos = usb_utils.find_pico()
+        ("we got %s picos" % len(self.picos))
+        if len(self.picos) is not 0:
+            self.ui.label_pico_num.setText(str(len(self.picos)) + " controller online")
+
+        for dev in self.picos:
+            dev.outep, dev.inep = usb_utils.get_ep(dev)
+
+        for dev in self.picos:
+            dev.outep.write("hello".encode())
         self.ui.radioButton_color_red.toggled.connect(self.onRedClicked)
         self.ui.radioButton_color_green.toggled.connect(self.onGreenClicked)
         self.ui.radioButton_color_blue.toggled.connect(self.onBlueClicked)
@@ -44,16 +54,7 @@ class MainWindow(QtWidgets.QMainWindow ):
 
         self.ui.textEdit_led_single.textChanged.connect(self.onledsingleTextChanged)
 
-        self.picos = usb_utils.find_pico()
-        ("we got %s picos" % len(self.picos))
-        if len(self.picos) is not 0:
-            self.ui.label_pico_num.setText(str(len(self.picos)) + " controller online")
 
-        for dev in self.picos:
-            dev.outep, dev.inep = usb_utils.get_ep(dev)
-
-        for dev in self.picos:
-            dev.outep.write("hello".encode())
 
         self.search_pico = usb_utils.find_pico
         self.thread = Worker(method=self.search_pico)
@@ -89,43 +90,57 @@ class MainWindow(QtWidgets.QMainWindow ):
             self.ui.textEdit_led_single.setReadOnly(False)
 
     def ontextChanged(self):
-        print("ontextChanged")
+
         if self.ui.textEdit_ledbrilevel.toPlainText() is not '':
             self.ui.verticalSlider.setValue(int(self.ui.textEdit_ledbrilevel.toPlainText()))
             self.ui.label_slider_value.setText(self.ui.textEdit_ledbrilevel.toPlainText())
+            if len(self.picos) > 0:
+                for dev in self.picos:
+                    cmd = "set_br: " + self.ui.textEdit_ledbrilevel.toPlainText()
+                    dev.outep.write(cmd.encode())
         else:
             self.ui.verticalSlider.setValue(0)
 
     def onVerticalSlideMoved(self):
-        print("onVerticalSlide")
-        print("", self.ui.verticalSlider.value())
+
         value_str = str(self.ui.verticalSlider.value())
         self.ui.label_slider_value.setText(value_str)
 
     def onVerticalSlideRelease(self):
-        print("onVerticalSlide")
-        print("", self.ui.verticalSlider.value())
+
         self.ui.textEdit_ledbrilevel.setText(str(self.ui.verticalSlider.value()))
 
     def onRedClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Red")
+            if len(self.picos) > 0:
+                for dev in self.picos:
+                    dev.outep.write("test_color:red".encode())
 
     def onBlueClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Blue")
+            if len(self.picos) > 0:
+                for dev in self.picos:
+                    dev.outep.write("test_color:blue".encode())
 
     def onGreenClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Green")
+            if len(self.picos) > 0:
+                for dev in self.picos:
+                    dev.outep.write("test_color:green".encode())
 
     def onWhiteClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("White")
+            if len(self.picos) > 0:
+                for dev in self.picos:
+                    dev.outep.write("test_color:white".encode())
 
     def closeEvent(self, event):
         log.debug("closeEvent")
