@@ -13,10 +13,26 @@ import os
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 
-led_color = "test_color:RED"
+class LED_PAR():
+    COLOR_RED = "test_color:RED"
+    COLOR_GREEN = "test_color:GREEN"
+    COLOR_BLUE = "test_color:BLUE"
+    COLOR_WHITE = "test_color:WHITE"
+
+led_color = LED_PAR.COLOR_RED
 led_num_option = 'led_num_all'
 br_value = 64
 led_select = 3
+
+def route_set_led_br(br):
+    global br_value
+    br_value = br
+
+def route_set_led_color(color):
+    global led_color
+    led_color = color
+
+
 def get_led_num_default():
     print("in get_led_num_default, led_num_option:", led_num_option)
     if led_num_option is not None:
@@ -28,28 +44,35 @@ def get_led_num_default():
     return 'led_num_all'
 
 class TestForm(Form ):
-
+    #style = "font-size:64px"
+    style = {'class': 'ourClasses', 'style': 'font-size:32px;'}
     color_switcher = RadioField(
-        'led_num',
+        'Led Color',
         [validators.Required()],
-        choices=[('test_color:RED', 'RED'), ('test_color:GREEN', 'GREEN'), ('test_color:BLUE', 'BLUE'), ('test_color:WHITE', 'WHITE')], default=led_color
+        choices=[('test_color:RED', 'RED'), ('test_color:GREEN', 'GREEN'), ('test_color:BLUE', 'BLUE'), ('test_color:WHITE', 'WHITE')],
+        default=led_color,
+        render_kw=style
     )
     led_num_default = get_led_num_default()
     print("in TestForm, led_num_default:", led_num_default)
-    led_brightness_fields = IntegerField(label="Led Brightness:",validators=[
+    led_brightness_fields = IntegerField(label="Led Brightness:", _name="Led Brightness:", validators=[
                 validators.Required(),
                 validators.NumberRange(min=0, max=255)
-            ], default=br_value)
+            ], default=br_value,
+            render_kw=style)
+
     choice_switcher = RadioField(
         'led_num',
         [validators.Required()],
-        choices=[('led_num_all', 'ALL'), ('led_num_single', 'SINGLE')], default=led_num_default
+        choices=[('led_num_all', 'ALL'), ('led_num_single', 'SINGLE')], default=led_num_default,
+        render_kw=style
     )
     led_select_fields = IntegerField(label="Led Num:", validators=[
         validators.Required(),
         validators.NumberRange(min=1, max=961)
-    ], default=led_select)
-    submit = SubmitField('Submit')
+        ], default=led_select,
+        render_kw=style)
+    submit = SubmitField('Submit',render_kw=style)
 
 @app.route("/")
 def index():
@@ -95,6 +118,7 @@ def LED_NUM():
     global led_num_option
     global led_select
     global br_value
+    log.debug("led_color : %s", led_color)
     list_led_color = request.form.getlist('color_switcher')
     led_color = list_led_color[0]
     send_message(color_switch=led_color)
@@ -107,7 +131,6 @@ def LED_NUM():
 
     list_led_select = request.form.getlist('led_select_fields')
     led_select = list_led_select[0]
-
 
     send_message(set_br="br_value:" + br_value)
     if 'all' in led_num_option[0]:

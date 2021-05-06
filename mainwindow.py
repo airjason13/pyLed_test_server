@@ -9,7 +9,7 @@ import jlog
 import sys
 import logging
 log = jlog.logging_init("MainWindow")
-
+from routes import route_set_led_color, route_set_led_br, LED_PAR
 
 class MainWindow(QtWidgets.QMainWindow ):
     def __init__(self):
@@ -76,18 +76,32 @@ class MainWindow(QtWidgets.QMainWindow ):
         self.thread.start()"""
     def onledsingleTextChanged(self):
         print("led single num:", self.ui.textEdit_led_single.toPlainText())
+        if(self.ui.radioButton_single.isChecked()):
+            #self.ui.textEdit_led_single.setReadOnly(True)
+            if len(self.picos) > 0:
+                for dev in self.picos:
+                    cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
+                    dev.outep.write(cmd.encode())
 
     def onradiobuttonAllClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             print("all led")
             self.ui.textEdit_led_single.setReadOnly(True)
+            if len(self.picos) > 0:
+                for dev in self.picos:
+                    cmd = "led_select: -1"
+                    dev.outep.write(cmd.encode())
 
     def onradiobuttonSingleClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             print("single led")
             self.ui.textEdit_led_single.setReadOnly(False)
+            if len(self.picos) > 0:
+                for dev in self.picos:
+                    cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
+                    dev.outep.write(cmd.encode())
 
     def ontextChanged(self):
 
@@ -114,6 +128,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Red")
+            route_set_led_color(LED_PAR.COLOR_RED)
             if len(self.picos) > 0:
                 for dev in self.picos:
                     dev.outep.write("test_color:red".encode())
@@ -122,6 +137,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Blue")
+            route_set_led_color(LED_PAR.COLOR_BLUE)
             if len(self.picos) > 0:
                 for dev in self.picos:
                     dev.outep.write("test_color:blue".encode())
@@ -130,6 +146,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Green")
+            route_set_led_color(LED_PAR.COLOR_GREEN)
             if len(self.picos) > 0:
                 for dev in self.picos:
                     dev.outep.write("test_color:green".encode())
@@ -138,6 +155,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("White")
+            route_set_led_color(LED_PAR.COLOR_WHITE)
             if len(self.picos) > 0:
                 for dev in self.picos:
                     dev.outep.write("test_color:white".encode())

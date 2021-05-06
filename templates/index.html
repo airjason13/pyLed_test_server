@@ -32,11 +32,12 @@
         <input type="submit" style="height:100px; width:100px" value="submit" />
     </form>-->
     <form name="LED_NUM_Form" action="LED_NUM" method="post" onsubmit="">
+        <h1>{{ form.color_switcher.label() }}</h1>
         {{ form.color_switcher() }}
-        {{ form.led_brightness_fields.label() }}
+        <h1>{{ form.led_brightness_fields.label() }}</h1>
         {{ form.led_brightness_fields() }}
+        <h1>{{ form.led_select_fields.label() }}</h1>
         {{ form.choice_switcher()}}
-        {{ form.led_select_fields.label() }}
         {{ form.led_select_fields() }}
     <p> {{ form.submit }}</p>
     </form>
