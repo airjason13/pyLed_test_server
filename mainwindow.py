@@ -121,7 +121,7 @@ class MainWindow(QtWidgets.QMainWindow ):
     def onradiobuttonAllClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
-            print("all led")
+            #print("all led")
             self.ui.textEdit_led_single.setReadOnly(True)
             cmd = "led_select: -1"
             self.send_pico_cmd(cmd)
@@ -135,7 +135,7 @@ class MainWindow(QtWidgets.QMainWindow ):
     def onradiobuttonSingleClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
-            print("single led")
+            #print("single led")
             self.ui.textEdit_led_single.setReadOnly(False)
             cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
             self.send_pico_cmd(cmd)
