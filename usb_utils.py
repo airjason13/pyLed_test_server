@@ -16,7 +16,8 @@ def find_pico():
     #log.debug("find_pico")
     # was it found?
     if devs is None:
-        raise ValueError('Device not found')
+        #raise ValueError('Device not found')
+        log.debug("no picos")
 
     #for dev in devs:
     #    print("dev :", dev.get_active_configuration())

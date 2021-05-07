@@ -10,6 +10,8 @@ import sys
 import logging
 log = jlog.logging_init("MainWindow")
 from routes import route_set_led_color, route_set_led_br, LED_PAR
+import threading
+qmut = threading.Lock()
 
 class MainWindow(QtWidgets.QMainWindow ):
     def __init__(self):
@@ -17,7 +19,7 @@ class MainWindow(QtWidgets.QMainWindow ):
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-
+        self.mutex = qmut
         #self._timer = QTimer(self)
         #self._timer.timeout.connect(self.play)
         #log = jlog.logging_init("MainWindow")
@@ -56,7 +58,7 @@ class MainWindow(QtWidgets.QMainWindow ):
 
 
 
-        self.search_pico = usb_utils.find_pico
+        self.search_pico = self.search_pico
         self.thread = Worker(method=self.search_pico)
         self.thread.start()
         """self.flask_server_port = flask_server_port
@@ -74,44 +76,89 @@ class MainWindow(QtWidgets.QMainWindow ):
         self.communicate.route_sig[str].connect(self.test_from_route)
         self.thread = Worker(communicate=self.communicate)
         self.thread.start()"""
+
+    def search_pico(self):
+
+        self.mutex.acquire()
+        #log.debug("search_pico")
+        #print("num of self.picos: ", len(self.picos))
+        if len(self.picos) is 0:
+            self.picos = usb_utils.find_pico()
+            if len(self.picos) is not 0:
+                self.ui.label_pico_num.setText(str(len(self.picos)) + " controller online")
+                for dev in self.picos:
+                    dev.outep, dev.inep = usb_utils.get_ep(dev)
+        else:
+            tmp_picos = usb_utils.find_pico()
+            #print("num of tmp_picos: ", len(tmp_picos))
+            if len(tmp_picos) is 0:
+                self.picos = []
+
+                self.ui.label_pico_num.setText("Zero controller online")
+            elif len(tmp_picos) is len(self.picos):
+                log.debug("no changed")
+            else:
+                log.debug("num of picos changed")
+                #print(tmp_picos)
+
+        #log.debug("search_pico out")
+        self.mutex.release()
+
     def onledsingleTextChanged(self):
         print("led single num:", self.ui.textEdit_led_single.toPlainText())
         if(self.ui.radioButton_single.isChecked()):
             #self.ui.textEdit_led_single.setReadOnly(True)
+            cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
+            cmd = "led_select: -1"
+            self.send_pico_cmd(cmd)
+            """self.mutex.acquire()
             if len(self.picos) > 0:
                 for dev in self.picos:
                     cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
                     dev.outep.write(cmd.encode())
+            self.mutex.release()"""
 
     def onradiobuttonAllClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             print("all led")
             self.ui.textEdit_led_single.setReadOnly(True)
+            cmd = "led_select: -1"
+            self.send_pico_cmd(cmd)
+            """self.mutex.acquire()
             if len(self.picos) > 0:
                 for dev in self.picos:
                     cmd = "led_select: -1"
                     dev.outep.write(cmd.encode())
+            self.mutex.release()"""
 
     def onradiobuttonSingleClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             print("single led")
             self.ui.textEdit_led_single.setReadOnly(False)
+            cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
+            self.send_pico_cmd(cmd)
+            """self.mutex.acquire()
             if len(self.picos) > 0:
                 for dev in self.picos:
                     cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
                     dev.outep.write(cmd.encode())
+            self.mutex.release()"""
 
     def ontextChanged(self):
 
         if self.ui.textEdit_ledbrilevel.toPlainText() is not '':
             self.ui.verticalSlider.setValue(int(self.ui.textEdit_ledbrilevel.toPlainText()))
             self.ui.label_slider_value.setText(self.ui.textEdit_ledbrilevel.toPlainText())
+            cmd = "set_br: " + self.ui.textEdit_ledbrilevel.toPlainText()
+            self.send_pico_cmd(cmd)
+            """self.mutex.acquire()
             if len(self.picos) > 0:
                 for dev in self.picos:
                     cmd = "set_br: " + self.ui.textEdit_ledbrilevel.toPlainText()
                     dev.outep.write(cmd.encode())
+            self.mutex.release()"""
         else:
             self.ui.verticalSlider.setValue(0)
 
@@ -129,40 +176,58 @@ class MainWindow(QtWidgets.QMainWindow ):
         if radioButton.isChecked():
             log.debug("Red")
             route_set_led_color(LED_PAR.COLOR_RED)
+            self.send_pico_cmd("test_color:red")
+            """self.mutex.acquire()
             if len(self.picos) > 0:
                 for dev in self.picos:
                     dev.outep.write("test_color:red".encode())
-
+            self.mutex.release()"""
     def onBlueClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Blue")
             route_set_led_color(LED_PAR.COLOR_BLUE)
+            self.send_pico_cmd("test_color:blue")
+            """self.mutex.acquire()
             if len(self.picos) > 0:
                 for dev in self.picos:
                     dev.outep.write("test_color:blue".encode())
-
+            self.mutex.release()"""
     def onGreenClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Green")
             route_set_led_color(LED_PAR.COLOR_GREEN)
+            self.send_pico_cmd("test_color:green")
+            """self.mutex.acquire()
             if len(self.picos) > 0:
                 for dev in self.picos:
                     dev.outep.write("test_color:green".encode())
-
+            self.mutex.release()"""
     def onWhiteClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("White")
             route_set_led_color(LED_PAR.COLOR_WHITE)
+            self.send_pico_cmd("test_color:white")
+            """self.mutex.acquire()
             if len(self.picos) > 0:
                 for dev in self.picos:
                     dev.outep.write("test_color:white".encode())
-
+            self.mutex.release()"""
     def closeEvent(self, event):
         log.debug("closeEvent")
         #server.removeServer(server.fullServerName())
+
+    def send_pico_cmd(self, cmd_str):
+        self.mutex.acquire()
+        try:
+            if len(self.picos) > 0:
+                for dev in self.picos:
+                    dev.outep.write(cmd_str.encode())
+        except:
+            log.error("send_pico_cmd error")
+        self.mutex.release()
 
     def __del__(self):
         log.debug("Main window del")

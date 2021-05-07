@@ -13,7 +13,11 @@ class Worker(QThread):
         self.loop = loop(method= self.method)
 
     def run(self):
-        self.loop.methodA()
+        #self.loop.methodA()
+        while True:
+            time.sleep(0.1)
+            self.method()
+
 
 class loop(object):
 
