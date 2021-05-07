@@ -109,7 +109,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         if(self.ui.radioButton_single.isChecked()):
             #self.ui.textEdit_led_single.setReadOnly(True)
             cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
-            cmd = "led_select: -1"
+            
             self.send_pico_cmd(cmd)
             """self.mutex.acquire()
             if len(self.picos) > 0:
