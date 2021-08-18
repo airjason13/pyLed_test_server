@@ -3,7 +3,7 @@ import usb.util
 import jlog
 log = jlog.logging_init("usb_utils")
 pico_vid = 0x0000
-pico_pid = 0x0001
+pico_pid = 0x0002
 """
 function : find_pico
 parameter : void

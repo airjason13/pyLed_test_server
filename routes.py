@@ -67,11 +67,14 @@ class TestForm(Form ):
         choices=[('led_num_all', 'ALL'), ('led_num_single', 'SINGLE')], default=led_num_default,
         render_kw=style
     )
-    led_select_fields = IntegerField(label="Led Num:", validators=[
-        validators.Required(),
-        validators.NumberRange(min=1, max=961)
-        ], default=led_select,
-        render_kw=style)
+    led_select_fields = IntegerField(
+        label="Led Num:", validators=[
+            validators.Required(),
+            validators.NumberRange(min=1, max=961)
+        ],
+        default=led_select,
+        render_kw=style
+    )
     submit = SubmitField('Submit',render_kw=style)
 
 @app.route("/")

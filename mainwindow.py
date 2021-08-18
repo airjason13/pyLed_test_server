@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtGui, QtCore, QtNetwork
 from PyQt5.QtCore import QTimer, pyqtSignal, QObject, QThread
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QLabel, QRadioButton
+from PyQt5.QtCore import QStringListModel
 from UI.mainwindows import Ui_MainWindow
 import usb_utils as usb_utils
 from pyqt_worker import *
@@ -26,7 +27,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         log.debug("This is MainWindow")
         self.picos = usb_utils.find_pico()
         ("we got %s picos" % len(self.picos))
-        if len(self.picos) is not 0:
+        if len(self.picos) != 0:
             self.ui.label_pico_num.setText(str(len(self.picos)) + " controller online")
 
         for dev in self.picos:
@@ -84,18 +85,18 @@ class MainWindow(QtWidgets.QMainWindow ):
         #print("num of self.picos: ", len(self.picos))
         if len(self.picos) is 0:
             self.picos = usb_utils.find_pico()
-            if len(self.picos) is not 0:
+            if len(self.picos) != 0:
                 self.ui.label_pico_num.setText(str(len(self.picos)) + " controller online")
                 for dev in self.picos:
                     dev.outep, dev.inep = usb_utils.get_ep(dev)
         else:
             tmp_picos = usb_utils.find_pico()
             #print("num of tmp_picos: ", len(tmp_picos))
-            if len(tmp_picos) is 0:
+            if len(tmp_picos) == 0:
                 self.picos = []
 
                 self.ui.label_pico_num.setText("Zero controller online")
-            elif len(tmp_picos) is len(self.picos):
+            elif len(tmp_picos) == len(self.picos):
                 log.debug("no changed")
             else:
                 log.debug("num of picos changed")
@@ -109,7 +110,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         if(self.ui.radioButton_single.isChecked()):
             #self.ui.textEdit_led_single.setReadOnly(True)
             cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
-            
+
             self.send_pico_cmd(cmd)
             """self.mutex.acquire()
             if len(self.picos) > 0:
