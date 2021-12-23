@@ -22,6 +22,7 @@ class LED_PAR():
 
 led_color = LED_PAR.COLOR_RED
 led_num_option = 'led_num_all'
+led_mode_option = 'normal_mode'
 br_value = 64
 led_select = 3
 
@@ -37,16 +38,23 @@ def route_set_led_color(color):
 def get_led_num_default():
     print("in get_led_num_default, led_num_option:", led_num_option)
     if led_num_option is not None:
-
         return led_num_option
     else:
         log.error("no led num option")
-
     return 'led_num_all'
+
+def get_lde_mode_default():
+    print("in get_led_num_default, led_num_option:", led_num_option)
+    if led_mode_option is not None:
+        return led_mode_option
+    else:
+        log.error("no led num option")
+    return 'normal_mode'
 
 class TestForm(Form ):
     #style = "font-size:64px"
     style = {'class': 'ourClasses', 'style': 'font-size:32px;'}
+    integerfiles_style = {'class': 'ourClasses', 'style': 'font-size:32px;width:6ch'}
     color_switcher = RadioField(
         'Led Color',
         [validators.Required()],
@@ -60,7 +68,8 @@ class TestForm(Form ):
                 validators.Required(),
                 validators.NumberRange(min=0, max=255)
             ], default=br_value,
-            render_kw=style)
+            render_kw=integerfiles_style
+    )
 
     choice_switcher = RadioField(
         'led_num',
@@ -74,9 +83,66 @@ class TestForm(Form ):
             validators.NumberRange(min=1, max=961)
         ],
         default=led_select,
+        render_kw=integerfiles_style
+    )
+    led_mode_default = get_lde_mode_default()
+    led_mode_switcher = RadioField(
+        'Area Mode',
+        [validators.Required()],
+        choices=[('normal_mode', 'Normal Mode'), ('area_mode', 'Area Mode')], default=led_num_default,
         render_kw=style
     )
-    submit = SubmitField('Submit',render_kw=style)
+    led_total_width_fields = IntegerField(
+        label="LED Total Width:", validators=[
+            validators.Required(),
+            validators.NumberRange(min=1, max=961),
+        ],
+        default=led_select,
+        render_kw=integerfiles_style
+    )
+    led_total_height_fields = IntegerField(
+        label="LED Total Height:", validators=[
+            validators.Required(),
+            validators.NumberRange(min=1, max=961),
+        ],
+        default=led_select,
+        render_kw=integerfiles_style
+    )
+    led_startx_fields = IntegerField(
+        label="LED Area StartX:", validators=[
+            validators.Required(),
+            validators.NumberRange(min=1, max=961),
+        ],
+        default=led_select,
+        render_kw=integerfiles_style
+    )
+    led_starty_fields = IntegerField(
+        label="LED Area StartY:", validators=[
+            validators.Required(),
+            validators.NumberRange(min=1, max=961),
+        ],
+        default=led_select,
+        render_kw=integerfiles_style
+    )
+    led_area_width_fields = IntegerField(
+        label="LED Area Width :", validators=[
+            validators.Required(),
+            validators.NumberRange(min=1, max=961),
+        ],
+        default=led_select,
+        render_kw=integerfiles_style
+    )
+    led_area_height_fields = IntegerField(
+        label="LED Area Height :", validators=[
+            validators.Required(),
+            validators.NumberRange(min=1, max=961),
+        ],
+        default=led_select,
+        #render_kw=style
+        render_kw=integerfiles_style
+    )
+    submit = SubmitField('Submit', render_kw=style)
+
 
 @app.route("/")
 def index():
@@ -135,6 +201,9 @@ def LED_NUM():
 
     list_led_select = request.form.getlist('led_select_fields')
     led_select = list_led_select[0]
+
+    list_mode_select = request.form.getlist('led_mode_switcher')
+    list_mode_select = list_led_select[0]
 
     send_message(set_br="br_value:" + br_value)
     if 'all' in led_num_option[0]:

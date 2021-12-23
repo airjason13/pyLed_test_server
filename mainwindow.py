@@ -191,44 +191,28 @@ class MainWindow(QtWidgets.QMainWindow ):
             log.debug("Red")
             route_set_led_color(LED_PAR.COLOR_RED)
             self.send_pico_cmd("test_color:red")
-            """self.mutex.acquire()
-            if len(self.picos) > 0:
-                for dev in self.picos:
-                    dev.outep.write("test_color:red".encode())
-            self.mutex.release()"""
+
     def onBlueClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Blue")
             route_set_led_color(LED_PAR.COLOR_BLUE)
             self.send_pico_cmd("test_color:blue")
-            """self.mutex.acquire()
-            if len(self.picos) > 0:
-                for dev in self.picos:
-                    dev.outep.write("test_color:blue".encode())
-            self.mutex.release()"""
+
     def onGreenClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("Green")
             route_set_led_color(LED_PAR.COLOR_GREEN)
             self.send_pico_cmd("test_color:green")
-            """self.mutex.acquire()
-            if len(self.picos) > 0:
-                for dev in self.picos:
-                    dev.outep.write("test_color:green".encode())
-            self.mutex.release()"""
+
     def onWhiteClicked(self):
         radioButton = self.sender()
         if radioButton.isChecked():
             log.debug("White")
             route_set_led_color(LED_PAR.COLOR_WHITE)
             self.send_pico_cmd("test_color:white")
-            """self.mutex.acquire()
-            if len(self.picos) > 0:
-                for dev in self.picos:
-                    dev.outep.write("test_color:white".encode())
-            self.mutex.release()"""
+
     def closeEvent(self, event):
         log.debug("closeEvent")
         #server.removeServer(server.fullServerName())
