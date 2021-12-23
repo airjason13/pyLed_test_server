@@ -1,4 +1,7 @@
+pyqt5
 pyqt5-tools
 flask
 pyusb
 pynput
+flask_wtf
+wtforms==2.3.3

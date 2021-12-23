@@ -9,12 +9,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from global_def import *
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(960, 650)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
@@ -49,8 +50,9 @@ class Ui_MainWindow(object):
         self.label_pico_num = QtWidgets.QLabel(self.centralwidget)
         self.label_pico_num.setGeometry(QtCore.QRect(430, 50, 171, 21))
         self.label_pico_num.setObjectName("label_pico_num")
+
         self.groupBox_2 = QtWidgets.QGroupBox(self.centralwidget)
-        self.groupBox_2.setGeometry(QtCore.QRect(420, 150, 211, 201))
+        self.groupBox_2.setGeometry(QtCore.QRect(420, 80, 300, 200))
         self.groupBox_2.setObjectName("groupBox_2")
         self.radioButton_all = QtWidgets.QRadioButton(self.groupBox_2)
         self.radioButton_all.setGeometry(QtCore.QRect(30, 50, 99, 21))
@@ -61,6 +63,59 @@ class Ui_MainWindow(object):
         self.textEdit_led_single = QtWidgets.QTextEdit(self.groupBox_2)
         self.textEdit_led_single.setGeometry(QtCore.QRect(30, 120, 101, 31))
         self.textEdit_led_single.setObjectName("textEdit_led_single")
+
+        self.groupBox_3 = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox_3.setGeometry(QtCore.QRect(420, 300, 450, 300))
+        self.groupBox_3.setObjectName("groupBox_3")
+        self.radioButton_normalmode = QtWidgets.QRadioButton(self.groupBox_3)
+        self.radioButton_normalmode.setGeometry(QtCore.QRect(30, 50, 120, 31))
+        self.radioButton_normalmode.setObjectName("radioButton_normalmode")
+        self.radioButton_areamode = QtWidgets.QRadioButton(self.groupBox_3)
+        self.radioButton_areamode.setGeometry(QtCore.QRect(30, 80, 120, 31))
+        self.radioButton_areamode.setObjectName("radioButton_areamode")
+        self.label_led_total_width = QtWidgets.QLabel(self.groupBox_3)
+        self.label_led_total_width.setGeometry(QtCore.QRect(30, 110, 120, 31))
+        self.label_led_total_width.setObjectName("label_led_total_width")
+
+        self.edit_led_total_width = QtWidgets.QLineEdit(self.groupBox_3)
+        self.edit_led_total_width.setGeometry(QtCore.QRect(150, 110, 45, 31))
+        self.edit_led_total_width.setObjectName("edit_led_total_width")
+
+        self.label_led_total_height = QtWidgets.QLabel(self.groupBox_3)
+        self.label_led_total_height.setGeometry(QtCore.QRect(220, 110, 120, 31))
+        self.label_led_total_height.setObjectName("label_led_total_height")
+        self.edit_led_total_height = QtWidgets.QLineEdit(self.groupBox_3)
+        self.edit_led_total_height.setGeometry(QtCore.QRect(340, 110, 45, 31))
+        self.edit_led_total_height.setObjectName("edit_led_total_height")
+
+        self.label_area_startx = QtWidgets.QLabel(self.groupBox_3)
+        self.label_area_startx.setGeometry(QtCore.QRect(30, 142, 120, 31))
+        self.label_area_startx.setObjectName("label_area_startx")
+        self.edit_area_startx = QtWidgets.QLineEdit(self.groupBox_3)
+        self.edit_area_startx.setGeometry(QtCore.QRect(150, 142, 45, 31))
+        self.edit_area_startx.setObjectName("edit_area_startx")
+
+        self.label_area_starty = QtWidgets.QLabel(self.groupBox_3)
+        self.label_area_starty.setGeometry(QtCore.QRect(220, 142, 120, 31))
+        self.label_area_starty.setObjectName("label_area_starty")
+        self.edit_area_starty = QtWidgets.QLineEdit(self.groupBox_3)
+        self.edit_area_starty.setGeometry(QtCore.QRect(340, 142, 45, 31))
+        self.edit_area_starty.setObjectName("edit_area_starty")
+
+        self.label_area_width = QtWidgets.QLabel(self.groupBox_3)
+        self.label_area_width.setGeometry(QtCore.QRect(30, 173, 120, 31))
+        self.label_area_width.setObjectName("label_area_width")
+        self.edit_area_width = QtWidgets.QLineEdit(self.groupBox_3)
+        self.edit_area_width.setGeometry(QtCore.QRect(150, 173, 45, 31))
+        self.edit_area_width.setObjectName("edit_area_width")
+
+        self.label_area_height = QtWidgets.QLabel(self.groupBox_3)
+        self.label_area_height.setGeometry(QtCore.QRect(220, 173, 120, 31))
+        self.label_area_height.setObjectName("label_area_height")
+        self.edit_area_height = QtWidgets.QLineEdit(self.groupBox_3)
+        self.edit_area_height.setGeometry(QtCore.QRect(340, 173, 45, 31))
+        self.edit_area_height.setObjectName("edit_area_height")
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 20))
@@ -76,13 +131,30 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "LED_1111_Controller"))
-        self.groupBox.setTitle(_translate("MainWindow", "GroupBox"))
+        self.groupBox.setTitle(_translate("MainWindow", "Color Parameters"))
         self.radioButton_color_red.setText(_translate("MainWindow", "Red"))
         self.radioButton_color_green.setText(_translate("MainWindow", "Green"))
         self.radioButton_color_blue.setText(_translate("MainWindow", "Blue"))
         self.radioButton_color_white.setText(_translate("MainWindow", "White"))
         self.label_ledbrilevel.setText(_translate("MainWindow", "LED Brightness Level"))
         self.label_pico_num.setText(_translate("MainWindow", "Zero controller online"))
-        self.groupBox_2.setTitle(_translate("MainWindow", "GroupBox"))
+        self.groupBox_2.setTitle(_translate("MainWindow", "LED Num Mode"))
         self.radioButton_all.setText(_translate("MainWindow", "ALL"))
         self.radioButton_single.setText(_translate("MainWindow", "Single"))
+        self.groupBox_3.setTitle(_translate("MainWindow", "LED Area Mode"))
+        self.radioButton_normalmode.setText(_translate("MainWindow", "Normal Mode"))
+        self.radioButton_areamode.setText(_translate("MainWindow", "Area Mode"))
+        self.label_led_total_width.setText(_translate("MainWindow", "Led Total Width:"))
+        self.label_led_total_height.setText(_translate("MainWindow", "Led Total Height:"))
+
+        self.edit_led_total_width.setText(_translate("MainWindow", str(led_total_width)))
+        self.edit_led_total_height.setText(_translate("MainWindow", str(led_total_height)))
+
+        self.label_area_startx.setText(_translate("MainWindow", "Area StartX:"))
+        self.edit_area_startx.setText(_translate("MainWindow", str(led_area_startx)))
+        self.label_area_starty.setText(_translate("MainWindow", "Area StartY:"))
+        self.edit_area_starty.setText(_translate("MainWindow", str(led_area_starty)))
+        self.label_area_width.setText(_translate("MainWindow", "Area Width:"))
+        self.edit_area_width.setText(_translate("MainWindow", str(led_area_width)))
+        self.label_area_height.setText(_translate("MainWindow", "Area Height:"))
+        self.edit_area_height.setText(_translate("MainWindow", str(led_area_height)))

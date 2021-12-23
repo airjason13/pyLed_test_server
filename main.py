@@ -9,8 +9,8 @@ from PyQt5 import QtWidgets
 import jqlocalserver
 from mainwindow import *
 import sys
-from pynput.mouse import Button, Controller
-mouse = Controller()
+# from pynput.mouse import Button, Controller
+# mouse = Controller()
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for, Response
 from flask_plugin import *
 import jlog
