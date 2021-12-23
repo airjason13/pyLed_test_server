@@ -13,17 +13,16 @@ import sys
 # mouse = Controller()
 from flask import Flask, render_template, send_from_directory, request, redirect, url_for, Response
 from flask_plugin import *
-import jlog
+
 
 app = Flask(__name__)
 from routes import *
-
+import log_utils
+log = log_utils.logging_init(__file__)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    log = jlog.logging_init("main")
-    log.debug("This is main")
     qtapp = QtWidgets.QApplication([])
     window = MainWindow()
 

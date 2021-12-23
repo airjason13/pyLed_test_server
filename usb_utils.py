@@ -1,7 +1,9 @@
 import usb.core
 import usb.util
-import jlog
-log = jlog.logging_init("usb_utils")
+import log_utils
+
+log = log_utils.logging_init(__file__)
+
 pico_vid = 0x0000
 pico_pid = 0x0002
 """

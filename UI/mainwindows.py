@@ -116,6 +116,9 @@ class Ui_MainWindow(object):
         self.edit_area_height.setGeometry(QtCore.QRect(340, 173, 45, 31))
         self.edit_area_height.setObjectName("edit_area_height")
 
+        self.btn_area_mode_params_confirm = QtWidgets.QPushButton(self.groupBox_3)
+        self.btn_area_mode_params_confirm.setGeometry(QtCore.QRect(340, 220, 64, 32))
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 20))
@@ -158,3 +161,4 @@ class Ui_MainWindow(object):
         self.edit_area_width.setText(_translate("MainWindow", str(led_area_width)))
         self.label_area_height.setText(_translate("MainWindow", "Area Height:"))
         self.edit_area_height.setText(_translate("MainWindow", str(led_area_height)))
+        self.btn_area_mode_params_confirm.setText(_translate("MainWindow", "Confirm"))

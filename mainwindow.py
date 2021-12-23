@@ -6,10 +6,12 @@ from PyQt5.QtCore import QStringListModel
 from UI.mainwindows import Ui_MainWindow
 import usb_utils as usb_utils
 from pyqt_worker import *
-import jlog
+
 import sys
-import logging
-log = jlog.logging_init("MainWindow")
+import log_utils
+
+log = log_utils.logging_init(__file__)
+
 from routes import route_set_led_color, route_set_led_br, LED_PAR
 import threading
 qmut = threading.Lock()
@@ -26,7 +28,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         #log = jlog.logging_init("MainWindow")
         log.debug("This is MainWindow")
         self.picos = usb_utils.find_pico()
-        ("we got %s picos" % len(self.picos))
+        log.debug("we got %s picos" % len(self.picos))
         if len(self.picos) != 0:
             self.ui.label_pico_num.setText(str(len(self.picos)) + " controller online")
 
@@ -50,10 +52,15 @@ class MainWindow(QtWidgets.QMainWindow ):
         self.ui.textEdit_ledbrilevel.textChanged.connect(self.ontextChanged)
 
         self.ui.radioButton_all.toggled.connect(self.onradiobuttonAllClicked)
-
         self.ui.radioButton_single.toggled.connect(self.onradiobuttonSingleClicked)
+
+        self.ui.radioButton_normalmode.toggled.connect(self.onradiobuttonNormalModeClicked)
+        self.ui.radioButton_areamode.toggled.connect(self.onradiobuttonAreaModeClicked)
+        self.ui.btn_area_mode_params_confirm.clicked.connect(self.onpushbuttonAreaParamsConfirm)
+
         self.ui.textEdit_led_single.setText("1")
         self.ui.radioButton_all.click()
+        self.ui.radioButton_normalmode.click()
 
         self.ui.textEdit_led_single.textChanged.connect(self.onledsingleTextChanged)
 
@@ -62,21 +69,6 @@ class MainWindow(QtWidgets.QMainWindow ):
         self.search_pico = self.search_pico
         self.thread = Worker(method=self.search_pico)
         self.thread.start()
-        """self.flask_server_port = flask_server_port
-        if self.ipAddress is not None:
-            print("self.ipAddress : ", self.ipAddress)
-
-        self.ui.StartHDMIin.clicked.connect(self.startHDMIin)
-        self.ui.closeButton.clicked.connect(self.closewindows)
-        self.ui.PauseButton.clicked.connect(self.pause)
-        self.ui.PauseButton.setEnabled(False)
-
-        self.ui.closeEvent = self.closeEvent
-
-        self.communicate = Communicate()
-        self.communicate.route_sig[str].connect(self.test_from_route)
-        self.thread = Worker(communicate=self.communicate)
-        self.thread.start()"""
 
     def search_pico(self):
 
@@ -146,6 +138,27 @@ class MainWindow(QtWidgets.QMainWindow ):
                     cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
                     dev.outep.write(cmd.encode())
             self.mutex.release()"""
+
+    def onradiobuttonNormalModeClicked(self):
+        log.debug("")
+        self.ui.edit_led_total_width.setDisabled(True)
+        self.ui.edit_led_total_height.setDisabled(True)
+        self.ui.edit_area_startx.setDisabled(True)
+        self.ui.edit_area_starty.setDisabled(True)
+        self.ui.edit_area_width.setDisabled(True)
+        self.ui.edit_area_height.setDisabled(True)
+
+    def onradiobuttonAreaModeClicked(self):
+        log.debug("")
+        self.ui.edit_led_total_width.setDisabled(False)
+        self.ui.edit_led_total_height.setDisabled(False)
+        self.ui.edit_area_startx.setDisabled(False)
+        self.ui.edit_area_starty.setDisabled(False)
+        self.ui.edit_area_width.setDisabled(False)
+        self.ui.edit_area_height.setDisabled(False)
+
+    def onpushbuttonAreaParamsConfirm(self):
+        log.debug("")
 
     def ontextChanged(self):
 

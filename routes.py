@@ -7,8 +7,9 @@ from global_def import *
 import traceback
 from flask_wtf import Form
 from wtforms import validators, RadioField, SubmitField, IntegerField
-import jlog
-log = jlog.logging_init("flask_plugin")
+import log_utils
+
+log = log_utils.logging_init(__file__)
 import os
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
