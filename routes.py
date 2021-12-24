@@ -142,7 +142,7 @@ class TestForm(Form ):
     led_mode_default = get_led_mode_default()
     log.debug("led_mode_default:%s", led_mode_default)
     led_mode_switcher = RadioField(
-        'Mode',
+        'Area_Mode',
         [validators.Required()],
         choices=[('led_normal_mode', 'Normal'), ('led_area_mode', 'Area')], default=get_led_mode_default(),
         render_kw=style
@@ -151,7 +151,7 @@ class TestForm(Form ):
     led_total_width_fields = IntegerField(
         label="LED Total Width:", validators=[
             validators.Required(),
-            validators.NumberRange(min=1, max=961),
+            validators.NumberRange(min=0, max=960),
         ],
         default=get_led_total_width_default(),
         render_kw=integerfiles_style
@@ -159,39 +159,39 @@ class TestForm(Form ):
     led_total_height_fields = IntegerField(
         label="LED Total Height:", validators=[
             validators.Required(),
-            validators.NumberRange(min=1, max=961),
+            validators.NumberRange(min=0, max=960),
         ],
         default=get_led_total_height_default(),
         render_kw=integerfiles_style
     )
-    led_startx_fields = IntegerField(
-        label="LED Area StartX:", validators=[
+    led_area_startx_fields = IntegerField(
+        label="LED_Area_StartX:", validators=[
             validators.Required(),
-            validators.NumberRange(min=1, max=961),
+            validators.NumberRange(min=0, max=960),
         ],
         default=get_led_area_startx_default(),
         render_kw=integerfiles_style
     )
-    led_starty_fields = IntegerField(
-        label="LED Area StartY:", validators=[
+    led_area_starty_fields = IntegerField(
+        label="LED_Area_StartY:", validators=[
             validators.Required(),
-            validators.NumberRange(min=1, max=961),
+            validators.NumberRange(min=0, max=960),
         ],
         default=get_led_area_starty_default(),
         render_kw=integerfiles_style
     )
     led_area_width_fields = IntegerField(
-        label="LED Area Width :", validators=[
+        label="LEDAreaWidth :", validators=[
             validators.Required(),
-            validators.NumberRange(min=1, max=961),
+            validators.NumberRange(min=0, max=960),
         ],
         default=get_led_area_width_default(),
         render_kw=integerfiles_style
     )
     led_area_height_fields = IntegerField(
-        label="LED Area Height :", validators=[
+        label="LEDAreaHeight :", validators=[
             validators.Required(),
-            validators.NumberRange(min=1, max=961),
+            validators.NumberRange(min=0, max=960),
         ],
         default=get_led_total_height_default(),
         #render_kw=style
@@ -249,6 +249,11 @@ def LED_NUM():
     global led_select
     global br_value
     global led_mode_option
+    global led_area_startx
+    global led_area_starty
+    global led_area_width
+    global led_area_height
+
     log.debug("led_color : %s", led_color)
     list_led_color = request.form.getlist('color_switcher')
     led_color = list_led_color[0]
@@ -262,16 +267,51 @@ def LED_NUM():
 
     list_led_select = request.form.getlist('led_select_fields')
     led_select = list_led_select[0]
-
     send_message(set_br="br_value:" + br_value)
+
     if 'all' in led_num_option[0]:
         send_message(led_num="led_num:" + led_num_option)
     else:
-        send_message(led_num="led_num:" + led_num_option + ",led_select:"+ led_select)
+        send_message(led_num="led_num:" + led_num_option + ",led_select:" + led_select)
 
-    # list_led_mode_option = request.form.getlist('led_mode_switcher')
-    # led_mode_option = list_led_mode_option[0]
-    # send_message(set_led_mode="led_mode_select:" + led_mode_option)
+
+
+    list_led_mode_option = request.form.getlist('led_mode_switcher')
+    led_mode_option = list_led_mode_option[0]
+    send_message(set_led_mode="led_mode_option:" + led_mode_option)
+
+    if 'area' in led_mode_option:
+        list_led_total_width = request.form.getlist('led_total_width_fields')
+        led_total_width = list_led_total_width[0]
+        log.debug("led_total_width:%s", led_total_width)
+        send_message(set_led_tatol_width="led_total_width:" + led_total_width)
+
+        list_led_total_height = request.form.getlist('led_total_height_fields')
+        led_total_height = list_led_total_height[0]
+        log.debug("led_total_height:%s", led_total_height)
+        send_message(set_led_tatol_height="led_total_height:" + led_total_height)
+
+        list_led_area_startx = request.form.getlist('led_area_startx_fields')
+        led_area_startx = list_led_area_startx[0]
+        log.debug("led_area_startx:%s", led_area_startx)
+        send_message(set_led_area_startx="led_area_startx:" + led_area_startx)
+
+        list_led_area_starty = request.form.getlist('led_area_starty_fields')
+        led_area_starty = list_led_area_starty[0]
+        log.debug("led_area_starty:%s", led_area_starty)
+        send_message(set_led_area_starty="led_area_starty:" + led_area_starty)
+
+        list_led_area_width = request.form.getlist('led_area_width_fields')
+        led_area_width = list_led_area_width[0]
+        log.debug("led_area_width:%s", led_area_width)
+        send_message(set_led_area_width="led_area_width:" + led_area_width)
+
+        list_led_area_height = request.form.getlist('led_area_height_fields')
+        led_area_height = list_led_area_height[0]
+        log.debug("led_area_height:%s", led_area_height)
+        send_message(set_led_area_height="led_area_height:" + led_area_height)
+
+        send_message(set_led_area_params_confirm="confirm:true")
 
 
     testform = TestForm()

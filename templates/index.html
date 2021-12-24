@@ -39,7 +39,7 @@
         <h1>{{ form.led_select_fields.label() }}</h1>
         {{ form.choice_switcher()}}
         {{ form.led_select_fields() }}
-        <!--<h1>{{ form.led_mode_switcher.label() }}</h1>
+        <h1>{{ form.led_mode_switcher.label() }}</h1>
         {{ form.led_mode_switcher() }}
             <h2>
                 <td>
@@ -51,10 +51,10 @@
             </h2>
             <h2>
                 <td>
-                    {{ form.led_startx_fields.label() }}
-                    {{ form.led_startx_fields() }}
-                    {{ form.led_starty_fields.label() }}
-                    {{ form.led_starty_fields() }}
+                    {{ form.led_area_startx_fields.label() }}
+                    {{ form.led_area_startx_fields() }}
+                    {{ form.led_area_starty_fields.label() }}
+                    {{ form.led_area_starty_fields() }}
                 </td>
             </h2>
             <h2>
@@ -64,9 +64,7 @@
                     {{ form.led_area_height_fields.label() }}
                     {{ form.led_area_height_fields() }}
                 </td>
-            </h2>-->
-
-
+            </h2>
     <p>
 
         {{ form.submit }}

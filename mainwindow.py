@@ -282,3 +282,60 @@ class MainWindow(QtWidgets.QMainWindow ):
             br_str = list_ori_str[1]
             self.ui.verticalSlider.setValue(int(br_str))
             self.ui.textEdit_ledbrilevel.setText(br_str)
+
+        if data.get("set_led_mode") is not None:
+            ori_str = data.get('set_led_mode')
+            list_ori_str = ori_str.split(":")
+            log.debug("set_led_mode, list_ori_str[1] = %s", list_ori_str[1])
+            if "normal" in list_ori_str[1]:
+                self.ui.radioButton_normalmode.click()
+            elif "area" in list_ori_str[1]:
+                self.ui.radioButton_areamode.click()
+            else:
+                log.fatal("unknow led mode")
+
+        if data.get("set_led_tatol_width") is not None:
+            ori_str = data.get('set_led_tatol_width')
+            list_ori_str = ori_str.split(":")
+            log.debug("set_led_tatol_width, list_ori_str[1] = %s", list_ori_str[1])
+            self.ui.edit_led_total_width.setText(list_ori_str[1])
+
+        if data.get("set_led_tatol_height") is not None:
+            ori_str = data.get('set_led_tatol_height')
+            list_ori_str = ori_str.split(":")
+            log.debug("set_led_tatol_height, list_ori_str[1] = %s", list_ori_str[1])
+            self.ui.edit_led_total_height.setText(list_ori_str[1])
+
+        if data.get("set_led_area_startx") is not None:
+            ori_str = data.get('set_led_area_startx')
+            list_ori_str = ori_str.split(":")
+            log.debug("led_area_startx, list_ori_str[1] = %s", list_ori_str[1])
+            self.ui.edit_area_startx.setText(list_ori_str[1])
+
+        if data.get("set_led_area_starty") is not None:
+            ori_str = data.get('set_led_area_starty')
+            list_ori_str = ori_str.split(":")
+            log.debug("set_led_area_starty, list_ori_str[1] = %s", list_ori_str[1])
+            self.ui.edit_area_starty.setText(list_ori_str[1])
+
+        if data.get("set_led_area_width") is not None:
+            ori_str = data.get('set_led_area_width')
+            list_ori_str = ori_str.split(":")
+            log.debug("set_led_area_width, list_ori_str[1] = %s", list_ori_str[1])
+            self.ui.edit_area_width.setText(list_ori_str[1])
+
+        if data.get("set_led_area_height") is not None:
+            ori_str = data.get('set_led_area_height')
+            list_ori_str = ori_str.split(":")
+            log.debug("set_led_area_height, list_ori_str[1] = %s", list_ori_str[1])
+            self.ui.edit_area_height.setText(list_ori_str[1])
+
+        if data.get("set_led_area_params_confirm") is not None:
+            ori_str = data.get('set_led_area_params_confirm')
+            list_ori_str = ori_str.split(":")
+            log.debug("set_led_area_params_confirm, list_ori_str[1] = %s", list_ori_str[1])
+            if "true" in list_ori_str[1]:
+                log.debug("btn_area_mode_params_confirm click")
+                self.ui.btn_area_mode_params_confirm.click()
+            else:
+                pass
