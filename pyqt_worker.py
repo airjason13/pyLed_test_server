@@ -15,7 +15,7 @@ class Worker(QThread):
     def run(self):
         #self.loop.methodA()
         while True:
-            time.sleep(0.1)
+            time.sleep(1)
             self.method()
 
 

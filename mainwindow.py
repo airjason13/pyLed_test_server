@@ -1,3 +1,5 @@
+import time
+
 from PyQt5 import QtWidgets, QtGui, QtCore, QtNetwork
 from PyQt5.QtCore import QTimer, pyqtSignal, QObject, QThread
 from PyQt5.QtGui import QImage, QPixmap
@@ -89,9 +91,11 @@ class MainWindow(QtWidgets.QMainWindow ):
 
                 self.ui.label_pico_num.setText("Zero controller online")
             elif len(tmp_picos) == len(self.picos):
-                log.debug("no changed")
+                pass
+                #log.debug("no changed")
             else:
-                log.debug("num of picos changed")
+                pass
+                #log.debug("num of picos changed")
                 #print(tmp_picos)
 
         #log.debug("search_pico out")
@@ -100,16 +104,9 @@ class MainWindow(QtWidgets.QMainWindow ):
     def onledsingleTextChanged(self):
         print("led single num:", self.ui.textEdit_led_single.toPlainText())
         if(self.ui.radioButton_single.isChecked()):
-            #self.ui.textEdit_led_single.setReadOnly(True)
             cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
-
             self.send_pico_cmd(cmd)
-            """self.mutex.acquire()
-            if len(self.picos) > 0:
-                for dev in self.picos:
-                    cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
-                    dev.outep.write(cmd.encode())
-            self.mutex.release()"""
+
 
     def onradiobuttonAllClicked(self):
         radioButton = self.sender()
@@ -118,12 +115,7 @@ class MainWindow(QtWidgets.QMainWindow ):
             self.ui.textEdit_led_single.setReadOnly(True)
             cmd = "led_select: -1"
             self.send_pico_cmd(cmd)
-            """self.mutex.acquire()
-            if len(self.picos) > 0:
-                for dev in self.picos:
-                    cmd = "led_select: -1"
-                    dev.outep.write(cmd.encode())
-            self.mutex.release()"""
+
 
     def onradiobuttonSingleClicked(self):
         radioButton = self.sender()
@@ -132,12 +124,7 @@ class MainWindow(QtWidgets.QMainWindow ):
             self.ui.textEdit_led_single.setReadOnly(False)
             cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
             self.send_pico_cmd(cmd)
-            """self.mutex.acquire()
-            if len(self.picos) > 0:
-                for dev in self.picos:
-                    cmd = "led_select: " + self.ui.textEdit_led_single.toPlainText()
-                    dev.outep.write(cmd.encode())
-            self.mutex.release()"""
+
 
     def onradiobuttonNormalModeClicked(self):
         log.debug("")
@@ -147,6 +134,8 @@ class MainWindow(QtWidgets.QMainWindow ):
         self.ui.edit_area_starty.setDisabled(True)
         self.ui.edit_area_width.setDisabled(True)
         self.ui.edit_area_height.setDisabled(True)
+        cmd = "test_mode:normal"
+        self.send_pico_cmd(cmd)
 
     def onradiobuttonAreaModeClicked(self):
         log.debug("")
@@ -156,9 +145,37 @@ class MainWindow(QtWidgets.QMainWindow ):
         self.ui.edit_area_starty.setDisabled(False)
         self.ui.edit_area_width.setDisabled(False)
         self.ui.edit_area_height.setDisabled(False)
+        cmd = "test_mode:area"
+        self.send_pico_cmd(cmd)
 
     def onpushbuttonAreaParamsConfirm(self):
         log.debug("")
+        cmd = "set_total_width: " + str(self.ui.edit_led_total_width.text())
+        log.debug("cmd = %s", cmd)
+        self.send_pico_cmd(cmd)
+
+        cmd = "set_total_height: " + str(self.ui.edit_led_total_height.text())
+        log.debug("cmd = %s", cmd)
+        self.send_pico_cmd(cmd)
+
+        cmd = "set_area_startx: " + str(self.ui.edit_area_startx.text())
+        log.debug("cmd = %s", cmd)
+        self.send_pico_cmd(cmd)
+
+        cmd = "set_area_starty: " + str(self.ui.edit_area_starty.text())
+        log.debug("cmd = %s", cmd)
+        self.send_pico_cmd(cmd)
+
+        cmd = "set_area_width: " + str(self.ui.edit_area_width.text())
+        log.debug("cmd = %s", cmd)
+        self.send_pico_cmd(cmd)
+
+        cmd = "set_area_height: " + str(self.ui.edit_area_height.text())
+        log.debug("cmd = %s", cmd)
+        self.send_pico_cmd(cmd)
+
+        cmd = "test_mode:area"
+        self.send_pico_cmd(cmd)
 
     def ontextChanged(self):
 
@@ -226,6 +243,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         except:
             log.error("send_pico_cmd error")
         self.mutex.release()
+        # time.sleep(0.3)
 
     def __del__(self):
         log.debug("Main window del")

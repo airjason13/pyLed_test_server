@@ -22,9 +22,15 @@ class LED_PAR():
 
 led_color = LED_PAR.COLOR_RED
 led_num_option = 'led_num_all'
-led_mode_option = 'normal_mode'
+led_mode_option = 'led_normal_mode'
 br_value = 64
 led_select = 3
+led_total_width = 80
+led_total_height = 12
+led_area_startx = 0
+led_area_starty = 0
+led_area_width = 80
+led_area_height = 12
 
 def route_set_led_br(br):
     global br_value
@@ -43,13 +49,61 @@ def get_led_num_default():
         log.error("no led num option")
     return 'led_num_all'
 
-def get_lde_mode_default():
-    print("in get_led_num_default, led_num_option:", led_num_option)
+def get_led_mode_default():
+    print("in get_led_mode_default, led_mode_option:", led_mode_option)
     if led_mode_option is not None:
         return led_mode_option
     else:
         log.error("no led num option")
     return 'normal_mode'
+
+def get_led_total_width_default():
+    print("in get_led_num_default, led_total_width:", led_total_width)
+    if led_total_width is not None:
+        return led_total_width
+    else:
+        log.error("no led num option")
+    return 80
+
+def get_led_total_height_default():
+    print("in led_total_height, led_num_option:", led_total_height)
+    if led_total_height is not None:
+        return led_total_height
+    else:
+        log.error("no led num option")
+    return 12
+
+def get_led_area_startx_default():
+    print("in led_area_startx, led_area_startx:", led_area_startx)
+    if led_area_startx is not None:
+        return led_area_startx
+    else:
+        log.error("no led num option")
+    return 0
+
+def get_led_area_starty_default():
+    print("in led_area_starty, led_area_starty:", led_area_starty)
+    if led_area_starty is not None:
+        return led_area_starty
+    else:
+        log.error("no led num option")
+    return 0
+
+def get_led_area_width_default():
+    print("in led_area_width, led_area_width:", led_area_width)
+    if led_area_width is not None:
+        return led_area_width
+    else:
+        log.error("no led num option")
+    return 80
+
+def get_led_area_height_default():
+    print("in led_area_height, led_area_height:", led_area_height)
+    if led_area_height is not None:
+        return led_area_height
+    else:
+        log.error("no led num option")
+    return 12
 
 class TestForm(Form ):
     #style = "font-size:64px"
@@ -85,19 +139,21 @@ class TestForm(Form ):
         default=led_select,
         render_kw=integerfiles_style
     )
-    led_mode_default = get_lde_mode_default()
+    led_mode_default = get_led_mode_default()
+    log.debug("led_mode_default:%s", led_mode_default)
     led_mode_switcher = RadioField(
-        'Area Mode',
+        'Mode',
         [validators.Required()],
-        choices=[('normal_mode', 'Normal Mode'), ('area_mode', 'Area Mode')], default=led_num_default,
+        choices=[('led_normal_mode', 'Normal'), ('led_area_mode', 'Area')], default=get_led_mode_default(),
         render_kw=style
     )
+
     led_total_width_fields = IntegerField(
         label="LED Total Width:", validators=[
             validators.Required(),
             validators.NumberRange(min=1, max=961),
         ],
-        default=led_select,
+        default=get_led_total_width_default(),
         render_kw=integerfiles_style
     )
     led_total_height_fields = IntegerField(
@@ -105,7 +161,7 @@ class TestForm(Form ):
             validators.Required(),
             validators.NumberRange(min=1, max=961),
         ],
-        default=led_select,
+        default=get_led_total_height_default(),
         render_kw=integerfiles_style
     )
     led_startx_fields = IntegerField(
@@ -113,7 +169,7 @@ class TestForm(Form ):
             validators.Required(),
             validators.NumberRange(min=1, max=961),
         ],
-        default=led_select,
+        default=get_led_area_startx_default(),
         render_kw=integerfiles_style
     )
     led_starty_fields = IntegerField(
@@ -121,7 +177,7 @@ class TestForm(Form ):
             validators.Required(),
             validators.NumberRange(min=1, max=961),
         ],
-        default=led_select,
+        default=get_led_area_starty_default(),
         render_kw=integerfiles_style
     )
     led_area_width_fields = IntegerField(
@@ -129,7 +185,7 @@ class TestForm(Form ):
             validators.Required(),
             validators.NumberRange(min=1, max=961),
         ],
-        default=led_select,
+        default=get_led_area_width_default(),
         render_kw=integerfiles_style
     )
     led_area_height_fields = IntegerField(
@@ -137,7 +193,7 @@ class TestForm(Form ):
             validators.Required(),
             validators.NumberRange(min=1, max=961),
         ],
-        default=led_select,
+        default=get_led_total_height_default(),
         #render_kw=style
         render_kw=integerfiles_style
     )
@@ -147,6 +203,7 @@ class TestForm(Form ):
 @app.route("/")
 def index():
     testform = TestForm()
+    testform.validate()
     return render_template("index.html", title=title, br=64, form=testform)
 
 
@@ -157,12 +214,15 @@ def TEST_COLOR_RED():
     #return redirect(url_for('index'))
     testform = TestForm()
     testform.validate_on_submit()
-    return render_template("index.html", title=title, form=testform)
+    return render_template("index.html", title=title, form=testform, validate=True)
 
 @app.route("/TEST_COLOR/GREEN", methods=['POST', 'GET'])
 def TEST_COLOR_GREEN():
     send_message(color_switch="test_color:GREEN")
-    return redirect(url_for('index'))
+    testform = TestForm()
+    testform.validate_on_submit()
+    return render_template("index.html", title=title, form=testform, validate=True)
+    #return redirect(url_for('index'))
 
 @app.route("/TEST_COLOR/BLUE", methods=['POST', 'GET'])
 def TEST_COLOR_BLUE():
@@ -188,6 +248,7 @@ def LED_NUM():
     global led_num_option
     global led_select
     global br_value
+    global led_mode_option
     log.debug("led_color : %s", led_color)
     list_led_color = request.form.getlist('color_switcher')
     led_color = list_led_color[0]
@@ -202,17 +263,19 @@ def LED_NUM():
     list_led_select = request.form.getlist('led_select_fields')
     led_select = list_led_select[0]
 
-    list_mode_select = request.form.getlist('led_mode_switcher')
-    list_mode_select = list_led_select[0]
-
     send_message(set_br="br_value:" + br_value)
     if 'all' in led_num_option[0]:
         send_message(led_num="led_num:" + led_num_option)
     else:
         send_message(led_num="led_num:" + led_num_option + ",led_select:"+ led_select)
 
+    # list_led_mode_option = request.form.getlist('led_mode_switcher')
+    # led_mode_option = list_led_mode_option[0]
+    # send_message(set_led_mode="led_mode_select:" + led_mode_option)
+
 
     testform = TestForm()
+
     return render_template("index.html",title=title, form=testform)
 
 def gen(video):
