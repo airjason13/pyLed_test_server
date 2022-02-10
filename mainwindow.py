@@ -60,9 +60,15 @@ class MainWindow(QtWidgets.QMainWindow ):
         self.ui.radioButton_areamode.toggled.connect(self.onradiobuttonAreaModeClicked)
         self.ui.btn_area_mode_params_confirm.clicked.connect(self.onpushbuttonAreaParamsConfirm)
 
+        # current gain or normal rgb mode
+        self.ui.radioButton_current_gain_mode.toggled.connect(self.set_current_gain_mode)
+        self.ui.radioButton_normal_rgb_mode.toggled.connect(self.set_normal_rgb_mode)
+
         self.ui.textEdit_led_single.setText("1")
         self.ui.radioButton_all.click()
         self.ui.radioButton_normalmode.click()
+
+        self.ui.radioButton_normal_rgb_mode.click()
 
         self.ui.textEdit_led_single.textChanged.connect(self.onledsingleTextChanged)
 
@@ -339,3 +345,19 @@ class MainWindow(QtWidgets.QMainWindow ):
                 self.ui.btn_area_mode_params_confirm.click()
             else:
                 pass
+
+    def set_current_gain_mode(self):
+        log.debug("")
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            cmd = "set_current_gain:"
+            self.send_pico_cmd(cmd)
+
+    def set_normal_rgb_mode(self):
+        log.debug("")
+        radioButton = self.sender()
+        if radioButton.isChecked():
+            # print("all led")
+            self.ui.textEdit_led_single.setReadOnly(True)
+            cmd = "set_current_gain:"
+            self.send_pico_cmd(cmd)

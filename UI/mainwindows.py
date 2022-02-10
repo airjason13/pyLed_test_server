@@ -119,6 +119,17 @@ class Ui_MainWindow(object):
         self.btn_area_mode_params_confirm = QtWidgets.QPushButton(self.groupBox_3)
         self.btn_area_mode_params_confirm.setGeometry(QtCore.QRect(340, 220, 64, 32))
 
+        # choose current gain or normal protocol
+        self.groupBox4 = QtWidgets.QGroupBox(self.centralwidget)
+        self.groupBox4.setGeometry(QtCore.QRect(20, 480, 371, 120))
+        self.radioButton_current_gain_mode = QtWidgets.QRadioButton(self.groupBox4)
+        self.radioButton_current_gain_mode.setGeometry(QtCore.QRect(30, 20, 220, 31))
+        self.radioButton_current_gain_mode.setObjectName("radioButton_current_gain_mode")
+        self.radioButton_normal_rgb_mode = QtWidgets.QRadioButton(self.groupBox4)
+        self.radioButton_normal_rgb_mode.setGeometry(QtCore.QRect(30, 60, 220, 31))
+        self.radioButton_normal_rgb_mode.setObjectName("radioButton_normal_rgb_mode")
+
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 20))
@@ -162,3 +173,5 @@ class Ui_MainWindow(object):
         self.label_area_height.setText(_translate("MainWindow", "Area Height:"))
         self.edit_area_height.setText(_translate("MainWindow", str(led_area_height)))
         self.btn_area_mode_params_confirm.setText(_translate("MainWindow", "Confirm"))
+        self.radioButton_current_gain_mode.setText(_translate("MainWindow", "Gain_Mode"))
+        self.radioButton_normal_rgb_mode.setText(_translate("MainWindow", "RGB_Mode"))
