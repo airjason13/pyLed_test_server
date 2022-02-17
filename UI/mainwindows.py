@@ -12,6 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from global_def import *
 
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -128,6 +129,24 @@ class Ui_MainWindow(object):
         self.radioButton_normal_rgb_mode = QtWidgets.QRadioButton(self.groupBox4)
         self.radioButton_normal_rgb_mode.setGeometry(QtCore.QRect(30, 60, 220, 31))
         self.radioButton_normal_rgb_mode.setObjectName("radioButton_normal_rgb_mode")
+        self.radioButton_current_gain_R = QtWidgets.QLabel(self.groupBox4)
+        self.radioButton_current_gain_R.setGeometry(QtCore.QRect(200, 20, 220, 31))
+        self.radioButton_current_gain_R.setObjectName("radioButton_current_gain_R")
+        self.set_gain_R = QtWidgets.QLineEdit(self.groupBox4)
+        self.set_gain_R.setGeometry(QtCore.QRect(260, 25, 80, 20))
+        self.set_gain_R.setObjectName("set_gain_R")
+        self.radioButton_current_gain_G = QtWidgets.QLabel(self.groupBox4)
+        self.radioButton_current_gain_G.setGeometry(QtCore.QRect(200, 40, 220, 31))
+        self.radioButton_current_gain_G.setObjectName("radioButton_current_gain_G")
+        self.set_gain_G = QtWidgets.QLineEdit(self.groupBox4)
+        self.set_gain_G.setGeometry(QtCore.QRect(260, 45, 80, 20))
+        self.set_gain_G.setObjectName("set_gain_G")
+        self.radioButton_current_gain_B = QtWidgets.QLabel(self.groupBox4)
+        self.radioButton_current_gain_B.setGeometry(QtCore.QRect(200, 60, 220, 31))
+        self.radioButton_current_gain_B.setObjectName("radioButton_current_gain_B")
+        self.set_gain_B = QtWidgets.QLineEdit(self.groupBox4)
+        self.set_gain_B.setGeometry(QtCore.QRect(260, 65, 80, 20))
+        self.set_gain_B.setObjectName("set_gain_B")
 
 
         MainWindow.setCentralWidget(self.centralwidget)
@@ -144,7 +163,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "LED_1111_Controller"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "LED_TESTER " + VERSION))
         self.groupBox.setTitle(_translate("MainWindow", "Color Parameters"))
         self.radioButton_color_red.setText(_translate("MainWindow", "Red"))
         self.radioButton_color_green.setText(_translate("MainWindow", "Green"))
@@ -173,5 +192,12 @@ class Ui_MainWindow(object):
         self.label_area_height.setText(_translate("MainWindow", "Area Height:"))
         self.edit_area_height.setText(_translate("MainWindow", str(led_area_height)))
         self.btn_area_mode_params_confirm.setText(_translate("MainWindow", "Confirm"))
-        self.radioButton_current_gain_mode.setText(_translate("MainWindow", "Gain_Mode"))
+        self.radioButton_current_gain_mode.setText(_translate("MainWindow", "RGB_Gain_Mode"))
         self.radioButton_normal_rgb_mode.setText(_translate("MainWindow", "RGB_Mode"))
+        self.radioButton_current_gain_R .setText(_translate("MainWindow", "R_Mode"))
+        self.set_gain_R.setText(_translate("MainWindow", "15"))
+        self.radioButton_current_gain_G .setText(_translate("MainWindow", "G_Mode"))
+        self.set_gain_G.setText(_translate("MainWindow", "15"))
+        self.radioButton_current_gain_B.setText(_translate("MainWindow", "B_Mode"))
+        self.set_gain_B.setText(_translate("MainWindow", "15"))
+

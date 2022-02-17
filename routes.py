@@ -31,6 +31,10 @@ led_area_startx = 0
 led_area_starty = 0
 led_area_width = 80
 led_area_height = 12
+led_protocol_option = 'led_rgb_mode'
+led_red_gain = 15
+led_green_gain = 15
+led_blue_gain = 15
 
 def route_set_led_br(br):
     global br_value
@@ -64,6 +68,38 @@ def get_led_total_width_default():
     else:
         log.error("no led num option")
     return 80
+
+def get_led_protocol_default():
+    print("in get_led_protocol_default, led_mode_option:", led_mode_option)
+    if led_protocol_option is not None:
+        return led_protocol_option
+    else:
+        log.error("no led num option")
+    return 'norma'
+
+def get_led_red_gain_default():
+    print("in led_total_height, led_num_option:", led_total_height)
+    if led_red_gain is not None:
+        return led_red_gain
+    else:
+        log.error("no led num option")
+    return 15
+
+def get_led_green_gain_default():
+    print("in led_total_height, led_num_option:", led_total_height)
+    if led_green_gain is not None:
+        return led_green_gain
+    else:
+        log.error("no led num option")
+    return 15
+
+def get_led_blue_gain_default():
+    print("in led_total_height, led_num_option:", led_total_height)
+    if led_blue_gain is not None:
+        return led_blue_gain
+    else:
+        log.error("no led num option")
+    return 15
 
 def get_led_total_height_default():
     print("in led_total_height, led_num_option:", led_total_height)
@@ -105,9 +141,13 @@ def get_led_area_height_default():
         log.error("no led num option")
     return 12
 
+def get_tester_version():
+    return VERSION
+
 class TestForm(Form ):
     #style = "font-size:64px"
-    style = {'class': 'ourClasses', 'style': 'font-size:32px;'}
+    version = get_tester_version()
+    style = {'class': 'ourClasses', 'style': 'font-size:24px;'}
     integerfiles_style = {'class': 'ourClasses', 'style': 'font-size:32px;width:6ch'}
     color_switcher = RadioField(
         'Led Color',
@@ -194,7 +234,41 @@ class TestForm(Form ):
             validators.NumberRange(min=0, max=960),
         ],
         default=get_led_total_height_default(),
-        #render_kw=style
+        render_kw=integerfiles_style
+    )
+
+    led_current_gain_switcher = RadioField(
+        'RGB Mode/Current Gain Mode',
+        [validators.Required()],
+        choices=[('led_rgb_mode', 'RGB'), ('led_current_gain_mode', 'Current Gain')], default=get_led_protocol_default(),
+        render_kw=style
+    )
+
+    led_red_gain_fields = IntegerField(
+        label="LEDRedGain : ", validators=[
+            validators.Required(),
+            validators.NumberRange(min=0, max=15),
+        ],
+        default=get_led_red_gain_default(),
+        # render_kw=style
+        render_kw=integerfiles_style
+    )
+    led_green_gain_fields = IntegerField(
+        label="LEDGreenGain :", validators=[
+            validators.Required(),
+            validators.NumberRange(min=0, max=15),
+        ],
+        default=get_led_green_gain_default(),
+        # render_kw=style
+        render_kw=integerfiles_style
+    )
+    led_blue_gain_fields = IntegerField(
+        label="LEDBlueGain : ", validators=[
+            validators.Required(),
+            validators.NumberRange(min=0, max=15),
+        ],
+        default=get_led_blue_gain_default(),
+        # render_kw=style
         render_kw=integerfiles_style
     )
     submit = SubmitField('Submit', render_kw=style)
@@ -253,6 +327,9 @@ def LED_NUM():
     global led_area_starty
     global led_area_width
     global led_area_height
+    global led_red_gain
+    global led_green_gain
+    global led_blue_gain
 
     log.debug("led_color : %s", led_color)
     list_led_color = request.form.getlist('color_switcher')
@@ -313,10 +390,26 @@ def LED_NUM():
 
         send_message(set_led_area_params_confirm="confirm:true")
 
+    # handle led current gain mode and rgb mode
+    list_led_current_gain_option = request.form.getlist('led_current_gain_switcher')
+    for i in list_led_current_gain_option:
+        log.debug("current_gain_option: %s", i)
+
+    # LED current gain mode/ rgb mode
+    if "led_current_gain_mode" in list_led_current_gain_option:
+        list_led_red_gain = request.form.getlist('led_red_gain_fields')
+        led_red_gain = list_led_red_gain[0]
+        log.debug("typeof(led_red_gain) : %s", type(led_red_gain))
+        list_led_green_gain = request.form.getlist('led_green_gain_fields')
+        led_green_gain = list_led_green_gain[0]
+        list_led_blue_gain = request.form.getlist('led_blue_gain_fields')
+        led_blue_gain = list_led_blue_gain[0]
+        led_current_gain = int(led_red_gain) << 16 | int(led_green_gain) << 8 | int(led_blue_gain)
+        send_message(set_led_current_gain="led_current_gain:" + str(led_current_gain))
 
     testform = TestForm()
 
-    return render_template("index.html",title=title, form=testform)
+    return render_template("index.html", title=title, form=testform)
 
 def gen(video):
     """视频流生成函数"""

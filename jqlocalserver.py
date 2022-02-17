@@ -14,7 +14,6 @@ class Server(QtNetwork.QLocalServer):
     def __init__(self):
         super().__init__()
 
-
         if self.isListening():
             print("listening")
         else:
@@ -26,7 +25,6 @@ class Server(QtNetwork.QLocalServer):
             print("No Pending Connections")
 
         self.newConnection.connect(self.handleConnection)
-
 
         self.removeServer(get_server_name())
         if not self.listen(get_server_name()):

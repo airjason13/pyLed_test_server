@@ -2,45 +2,109 @@
 {% block content %}
 
 
-    <hr>
-    <!--<form action="/TEST_COLOR/RED" method="POST">
-        <button name="redbtn" type="submit" value="red" style="float: left;height:100px; width:100px;background-image: linear-gradient(to right, #802000 0%, #a03000 51%, #f00000 100%)" >Red</button>
-    </form>
-    <form action="/TEST_COLOR/GREEN" method="POST">
-        <button name="greenbtn" type="submit" value="green" style="float: left;height:100px; width:100px;background-image: linear-gradient(to right, #008000 0%, #00a000 51%, #00f000 100%)" >Green</button>
-    </form>
-    <form action="/TEST_COLOR/BLUE" method="POST">
-        <button name="bluebtn" type="submit" value="blue" style="float: left;height:100px; width:100px;background-image: linear-gradient(to right, #002080 0%, #0030a0 51%, #0000f0 100%)">Blue</button>
-    </form>
-    <form action="/TEST_COLOR/WHITE" method="POST">
-        <button name="whitebtn" type="submit" value="white" style="height:100px; width:100px">White</button>
-    </form>-->
+<style type="text/css">
 
+#DIV1{
+    width:300px;
+    padding:2px;
+    //border:2px red solid;
+    float:left;
+}
 
-    <hr>
-    <h3>
-    <!--<form method="POST" action="BR_ADJUST">
-        <input type="range" value={{ br }} min="1" max="255" style="height:200px; width:600px" oninput="this.nextElementSibling.value = this.value" name="br_slider"/>
-        <output>{{ br }}</output>
-        <input type="submit" style="height:100px; width:100px" value="submit" />
-    </form>-->
-    </h3>
-    <!--<form method="POST" action="NUM">
-        燈數<br>
-        <input type="radio" name="led_num"  style="font-size:64px" value="ALL" > <font size="6">全亮  </font><br>
-        <input type="radio" name="led_num"  style="font-size:32px" value="Single"> <font size="6">單顆 </font><input type="text" name="欄位名稱"  style="font-size:32px" maxlength="3" pattern="\d{4}" value="3" required> <br>
-        <input type="submit" style="height:100px; width:100px" value="submit" />
-    </form>-->
+#DIV2{
+    width:450px;
+    padding:2px;
+    //border:2px green solid;
+    float:left;
+}
+
+#DIV3{
+    width:350px;
+    padding:2px;
+    //border:2px green solid;
+    float:left;
+}
+#DIV4{
+    width:350px;
+    padding:2px;
+    //border:2px green solid;
+    float:left;
+}
+#DIV5{
+    width:350px;
+    padding:2px;
+    //border:2px green solid;
+    float:left;
+}
+#DIV6{
+    width:350px;
+    padding:2px;
+    //border:2px green solid;
+    float:left;
+}
+
+</style>
     <form name="LED_NUM_Form" action="LED_NUM" method="post" onsubmit="">
-        <h1>{{ form.color_switcher.label() }}</h1>
-        {{ form.color_switcher() }}
-        <h1>{{ form.led_brightness_fields.label() }}</h1>
-        {{ form.led_brightness_fields() }}
-        <h1>{{ form.led_select_fields.label() }}</h1>
-        {{ form.choice_switcher()}}
-        {{ form.led_select_fields() }}
-        <h1>{{ form.led_mode_switcher.label() }}</h1>
-        {{ form.led_mode_switcher() }}
+
+        <h1>
+                {{ form.color_switcher.label() }}
+            </h1>
+        <div id="DIV1">
+                <h2>
+                    {{ form.color_switcher() }}
+                </h2>
+        </div>
+        <div id="DIV2">
+            <h2>
+                {{ form.led_brightness_fields.label() }}
+                {{ form.led_brightness_fields() }}
+            </h2>
+        </div>
+        <div style="clear:both;"></div>
+        <h1>
+                {{ form.led_current_gain_switcher.label() }}
+            </h1>
+        <div id="DIV3">
+            <h2>
+                {{ form.led_current_gain_switcher() }}
+            </h2>
+        </div>
+        <div id="DIV4">
+            <h2>
+                <td>
+                {{ form.led_red_gain_fields.label() }}
+                {{ form.led_red_gain_fields() }}
+                </td>
+                <td>
+                {{ form.led_green_gain_fields.label() }}
+                {{ form.led_green_gain_fields() }}
+                </td>
+                <td>
+                {{ form.led_blue_gain_fields.label() }}
+                {{ form.led_blue_gain_fields() }}
+                </td>
+            </h2>
+        </div>
+        <div style="clear:both;"></div>
+        <h1>
+            {{ form.led_select_fields.label() }}
+        </h1>
+        <div id="DIV5">
+            <h2>
+                {{ form.choice_switcher()}}
+            </h2>
+        </div>
+        <div id="DIV6">
+            <h2>
+                {{ form.led_select_fields.label() }}
+                {{ form.led_select_fields() }}
+            </h2>
+        </div>
+        <div style="clear:both;"></div>
+        <h1>
+            {{ form.led_mode_switcher.label() }}
+            {{ form.led_mode_switcher() }}
+        </h1>
             <h2>
                 <td>
                     {{ form.led_total_width_fields.label() }}
@@ -70,15 +134,7 @@
         {{ form.submit }}
     </p>
     </form>
-    <!--<form name="LED_NUM_Form" action="LED_NUM" method="post" onsubmit="">
-        <p>
-            <input type="radio" name="led_num_all" id="all" checked="checked"> <font size="6"> ALL</font> <br>
-            <input type="radio" name="led_num_single" id="single"> <font size="6"> Single</font>
-            <input type="text" name="led_num"  style="font-size:32px" maxlength="3"  value="3" ><br>
 
-        </p>
-    <p><input type=submit value=Submit></p>
-    </form>-->
 
 {% endblock %}
 
