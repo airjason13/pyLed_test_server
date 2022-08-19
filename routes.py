@@ -347,7 +347,9 @@ def LED_NUM():
         led_blue_gain = list_led_blue_gain[0]
         led_current_gain = int(led_red_gain) << 16 | int(led_green_gain) << 8 | int(led_blue_gain)
         send_message(set_led_current_gain="led_current_gain:" + str(led_current_gain))
-        return render_template("index.html", title=title, form=testform)
+        status_code = Response(status=200)
+        return status_code
+        # return render_template("index.html", title=title, form=testform)
 
     if testform.rgb_value_submit.data:
         log.debug("led_color : %s", led_color)
@@ -357,7 +359,9 @@ def LED_NUM():
         list_br_value = request.form.getlist('led_brightness_fields')
         br_value = list_br_value[0]
         send_message(set_br="br_value:" + br_value)
-        return render_template("index.html", title=title, form=testform)
+        status_code = Response(status=200)
+        return status_code
+        # return render_template("index.html", title=title, form=testform)
 
     log.debug("led_color : %s", led_color)
     list_led_color = request.form.getlist('color_switcher')
