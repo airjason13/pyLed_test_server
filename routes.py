@@ -273,6 +273,7 @@ class TestForm(Form):
     )
     submit = SubmitField('Submit', render_kw=style)
     current_gain_submit = SubmitField('SetCurrentGain', render_kw=style)
+    rgb_value_submit = SubmitField('SetRGBValue', render_kw=style)
 
 @app.route("/")
 def index():
@@ -330,6 +331,33 @@ def LED_NUM():
     global led_red_gain
     global led_green_gain
     global led_blue_gain
+    testform = TestForm()
+
+    #if testform.validate_on_submit():
+    #    log.debug("current_gain_submit A")
+    # print(testform.current_gain_submit.data)
+    if testform.current_gain_submit.data:
+        log.debug("current_gain_submit")
+        list_led_red_gain = request.form.getlist('led_red_gain_fields')
+        led_red_gain = list_led_red_gain[0]
+        log.debug("typeof(led_red_gain) : %s", type(led_red_gain))
+        list_led_green_gain = request.form.getlist('led_green_gain_fields')
+        led_green_gain = list_led_green_gain[0]
+        list_led_blue_gain = request.form.getlist('led_blue_gain_fields')
+        led_blue_gain = list_led_blue_gain[0]
+        led_current_gain = int(led_red_gain) << 16 | int(led_green_gain) << 8 | int(led_blue_gain)
+        send_message(set_led_current_gain="led_current_gain:" + str(led_current_gain))
+        return render_template("index.html", title=title, form=testform)
+
+    if testform.rgb_value_submit.data:
+        log.debug("led_color : %s", led_color)
+        list_led_color = request.form.getlist('color_switcher')
+        led_color = list_led_color[0]
+        send_message(color_switch=led_color)
+        list_br_value = request.form.getlist('led_brightness_fields')
+        br_value = list_br_value[0]
+        send_message(set_br="br_value:" + br_value)
+        return render_template("index.html", title=title, form=testform)
 
     log.debug("led_color : %s", led_color)
     list_led_color = request.form.getlist('color_switcher')
@@ -396,7 +424,7 @@ def LED_NUM():
         log.debug("current_gain_option: %s", i)
 
     # LED current gain mode/ rgb mode
-    if "led_current_gain_mode" in list_led_current_gain_option:
+    '''if "led_current_gain_mode" in list_led_current_gain_option:
         list_led_red_gain = request.form.getlist('led_red_gain_fields')
         led_red_gain = list_led_red_gain[0]
         log.debug("typeof(led_red_gain) : %s", type(led_red_gain))
@@ -405,7 +433,7 @@ def LED_NUM():
         list_led_blue_gain = request.form.getlist('led_blue_gain_fields')
         led_blue_gain = list_led_blue_gain[0]
         led_current_gain = int(led_red_gain) << 16 | int(led_green_gain) << 8 | int(led_blue_gain)
-        send_message(set_led_current_gain="led_current_gain:" + str(led_current_gain))
+        send_message(set_led_current_gain="led_current_gain:" + str(led_current_gain))'''
 
     testform = TestForm()
 

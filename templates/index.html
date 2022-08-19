@@ -49,7 +49,6 @@
         <h1>
                 {{ form.color_switcher.label() }}
             </h1>
-        -
                 <h2>
                     {{ form.color_switcher() }}
                 </h2>
@@ -59,16 +58,17 @@
                 {{ form.led_brightness_fields.label() }}
                 {{ form.led_brightness_fields() }}
             </h2>
+            {{ form.rgb_value_submit }}
         </div>
         <div style="clear:both;"></div>
-        <h1>
+        <!--<h1>
                 {{ form.led_current_gain_switcher.label() }}
             </h1>
         <div id="DIV3">
             <h2>
                 {{ form.led_current_gain_switcher() }}
             </h2>
-        </div>
+        </div>-->
         <div id="DIV4">
             <h2>
                 <td>
@@ -87,7 +87,7 @@
             </h2>
         </div>
         <div style="clear:both;"></div>
-        <h1>
+        <!--<h1>
             {{ form.led_select_fields.label() }}
         </h1>
         <div id="DIV5">
@@ -101,8 +101,8 @@
                 {{ form.led_select_fields() }}
             </h2>
         </div>
-        <div style="clear:both;"></div>
-        <h1>
+        <div style="clear:both;"></div>-->
+        <!--<h1>
             {{ form.led_mode_switcher.label() }}
             {{ form.led_mode_switcher() }}
         </h1>
@@ -129,10 +129,10 @@
                     {{ form.led_area_height_fields.label() }}
                     {{ form.led_area_height_fields() }}
                 </td>
-            </h2>
+            </h2>-->
     <p>
 
-        {{ form.submit }}
+        <!--{{ form.submit }}-->
     </p>
     </form>
 

@@ -356,9 +356,10 @@ class MainWindow(QtWidgets.QMainWindow ):
             self.ui.set_gain_R.setText(str(led_red_gain))
             self.ui.set_gain_G.setText(str(led_green_gain))
             self.ui.set_gain_B.setText(str(led_blue_gain))
-            self.ui.radioButton_current_gain_mode.click()
-        else:
-            self.ui.radioButton_normal_rgb_mode.click()
+            # self.ui.radioButton_current_gain_mode.click()
+            self.ui.btn_set_current_gain.click()
+        # else:
+        #    self.ui.radioButton_normal_rgb_mode.click()
 
     def set_current_gain_mode(self):
         log.debug("gain")
