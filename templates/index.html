@@ -49,7 +49,7 @@
         <h1>
                 {{ form.color_switcher.label() }}
             </h1>
-        <div id="DIV1">
+        -
                 <h2>
                     {{ form.color_switcher() }}
                 </h2>
@@ -83,6 +83,7 @@
                 {{ form.led_blue_gain_fields.label() }}
                 {{ form.led_blue_gain_fields() }}
                 </td>
+                {{ form.current_gain_submit }}
             </h2>
         </div>
         <div style="clear:both;"></div>

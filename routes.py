@@ -144,7 +144,7 @@ def get_led_area_height_default():
 def get_tester_version():
     return VERSION
 
-class TestForm(Form ):
+class TestForm(Form):
     #style = "font-size:64px"
     version = get_tester_version()
     style = {'class': 'ourClasses', 'style': 'font-size:24px;'}
@@ -245,7 +245,7 @@ class TestForm(Form ):
     )
 
     led_red_gain_fields = IntegerField(
-        label="LEDRedGain : ", validators=[
+        label="LEDRGain : ", validators=[
             validators.Required(),
             validators.NumberRange(min=0, max=15),
         ],
@@ -254,7 +254,7 @@ class TestForm(Form ):
         render_kw=integerfiles_style
     )
     led_green_gain_fields = IntegerField(
-        label="LEDGreenGain :", validators=[
+        label="LEDGGain :", validators=[
             validators.Required(),
             validators.NumberRange(min=0, max=15),
         ],
@@ -263,7 +263,7 @@ class TestForm(Form ):
         render_kw=integerfiles_style
     )
     led_blue_gain_fields = IntegerField(
-        label="LEDBlueGain : ", validators=[
+        label="LEDBGain : ", validators=[
             validators.Required(),
             validators.NumberRange(min=0, max=15),
         ],
@@ -272,7 +272,7 @@ class TestForm(Form ):
         render_kw=integerfiles_style
     )
     submit = SubmitField('Submit', render_kw=style)
-
+    current_gain_submit = SubmitField('SetCurrentGain', render_kw=style)
 
 @app.route("/")
 def index():

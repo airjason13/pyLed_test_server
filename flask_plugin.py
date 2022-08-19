@@ -3,6 +3,8 @@ from global_def import *
 import log_utils
 
 log = log_utils.logging_init(__file__)
+
+
 class ApplicationThread(QtCore.QThread):
     def __init__(self, application, port=flask_server_port):
         super(ApplicationThread, self).__init__()

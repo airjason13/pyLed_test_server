@@ -63,6 +63,7 @@ class MainWindow(QtWidgets.QMainWindow ):
         # current gain or normal rgb mode
         self.ui.radioButton_current_gain_mode.toggled.connect(self.set_current_gain_mode)
         self.ui.radioButton_normal_rgb_mode.toggled.connect(self.set_normal_rgb_mode)
+        self.ui.btn_set_current_gain.clicked.connect(self.set_current_gain)
 
         self.ui.textEdit_led_single.setText("1")
         self.ui.radioButton_all.click()
@@ -71,7 +72,6 @@ class MainWindow(QtWidgets.QMainWindow ):
         self.ui.radioButton_normal_rgb_mode.click()
 
         self.ui.textEdit_led_single.textChanged.connect(self.onledsingleTextChanged)
-
 
 
         self.search_pico = self.search_pico
@@ -347,25 +347,18 @@ class MainWindow(QtWidgets.QMainWindow ):
                 pass
 
         if data.get("set_led_current_gain") is not None:
-
             ori_str = data.get('set_led_current_gain')
             list_ori_str = ori_str.split(":")
-            log.debug("set_led_current_gain, list_ori_str[1] = %s", list_ori_str[1])
             current_gain = int(list_ori_str[1])
             led_red_gain = (current_gain & 0xff0000) >> 16
             led_green_gain = (current_gain & 0xff00) >> 8
             led_blue_gain = (current_gain & 0xff)
-            log.debug("led_red_gain = %d", led_red_gain)
-            log.debug("led_green_gain = %d", led_green_gain)
-            log.debug("led_blue_gain = %d", led_blue_gain)
             self.ui.set_gain_R.setText(str(led_red_gain))
             self.ui.set_gain_G.setText(str(led_green_gain))
             self.ui.set_gain_B.setText(str(led_blue_gain))
             self.ui.radioButton_current_gain_mode.click()
         else:
             self.ui.radioButton_normal_rgb_mode.click()
-
-
 
     def set_current_gain_mode(self):
         log.debug("gain")
@@ -389,3 +382,14 @@ class MainWindow(QtWidgets.QMainWindow ):
             self.ui.textEdit_led_single.setReadOnly(True)
             cmd = "set_current_gain:"
             self.send_pico_cmd(cmd)
+
+    def set_current_gain(self):
+        log.debug("Test")
+        gg = (int(self.ui.set_gain_R.text()) << 16) | \
+             int(self.ui.set_gain_G.text()) << 8 | \
+             int(self.ui.set_gain_B.text()) << 0
+
+        log.debug("gg:0x%x", gg)
+        log.debug("gg:%d", gg)
+        cmd = "set_current_gain: " + str(gg)
+        self.send_pico_cmd(cmd)

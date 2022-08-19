@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QPushButton
 from global_def import *
 
 
@@ -147,6 +148,9 @@ class Ui_MainWindow(object):
         self.set_gain_B = QtWidgets.QLineEdit(self.groupBox4)
         self.set_gain_B.setGeometry(QtCore.QRect(260, 65, 80, 20))
         self.set_gain_B.setObjectName("set_gain_B")
+        self.btn_set_current_gain = QPushButton(self.groupBox4)
+        self.btn_set_current_gain.setText("Set Current Gain")
+        self.btn_set_current_gain.setGeometry(QtCore.QRect(30, 90, 220, 28))
 
 
         MainWindow.setCentralWidget(self.centralwidget)
