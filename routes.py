@@ -317,6 +317,26 @@ def BR_ADJUST():
     testform = TestForm()
     return render_template("index.html", title=title, br=br_value, form=testform)
 
+
+@app.route("/LED_CG", methods=['POST', 'GET'])
+def LED_CG():
+    log.debug("")
+    testform = TestForm()
+    if testform.current_gain_submit.data:
+        log.debug("current_gain_submit")
+        list_led_red_gain = request.form.getlist('led_red_gain_fields')
+        led_red_gain = list_led_red_gain[0]
+        log.debug("typeof(led_red_gain) : %s", type(led_red_gain))
+        list_led_green_gain = request.form.getlist('led_green_gain_fields')
+        led_green_gain = list_led_green_gain[0]
+        list_led_blue_gain = request.form.getlist('led_blue_gain_fields')
+        led_blue_gain = list_led_blue_gain[0]
+        led_current_gain = int(led_red_gain) << 16 | int(led_green_gain) << 8 | int(led_blue_gain)
+        send_message(set_led_current_gain="led_current_gain:" + str(led_current_gain))
+        # status_code = Response(status=200)
+        # return status_code
+        return render_template("index.html", title=title, form=testform)
+
 @app.route("/LED_NUM", methods=['POST', 'GET'])
 def LED_NUM():
     global led_color
@@ -347,9 +367,9 @@ def LED_NUM():
         led_blue_gain = list_led_blue_gain[0]
         led_current_gain = int(led_red_gain) << 16 | int(led_green_gain) << 8 | int(led_blue_gain)
         send_message(set_led_current_gain="led_current_gain:" + str(led_current_gain))
-        status_code = Response(status=200)
-        return status_code
-        # return render_template("index.html", title=title, form=testform)
+        # status_code = Response(status=200)
+        # return status_code
+        return render_template("index.html", title=title, form=testform)
 
     if testform.rgb_value_submit.data:
         log.debug("led_color : %s", led_color)
@@ -359,9 +379,9 @@ def LED_NUM():
         list_br_value = request.form.getlist('led_brightness_fields')
         br_value = list_br_value[0]
         send_message(set_br="br_value:" + br_value)
-        status_code = Response(status=200)
-        return status_code
-        # return render_template("index.html", title=title, form=testform)
+        # status_code = Response(status=200)
+        # return status_code
+        return render_template("index.html", title=title, form=testform)
 
     log.debug("led_color : %s", led_color)
     list_led_color = request.form.getlist('color_switcher')
