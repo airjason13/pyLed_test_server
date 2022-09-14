@@ -151,29 +151,32 @@ class TestForm(Form):
     integerfiles_style = {'class': 'ourClasses', 'style': 'font-size:32px;width:6ch'}
     color_switcher = RadioField(
         'Led Color',
-        [validators.Required()],
+        # [validators.Required()],
         choices=[('test_color:RED', 'RED'), ('test_color:GREEN', 'GREEN'), ('test_color:BLUE', 'BLUE'), ('test_color:WHITE', 'WHITE')],
         default=led_color,
         render_kw=style
     )
     led_num_default = get_led_num_default()
     print("in TestForm, led_num_default:", led_num_default)
-    led_brightness_fields = IntegerField(label="Led Brightness:", _name="Led Brightness:", validators=[
-                validators.Required(),
-                validators.NumberRange(min=0, max=255)
-            ], default=br_value,
-            render_kw=integerfiles_style
+    led_brightness_fields = IntegerField(label="Led Brightness:",
+                                         _name="Led Brightness:",
+                                         validators=[
+                                                    # validators.Required(),
+                                                    validators.NumberRange(min=0, max=255)
+                                                ],
+                                         default=br_value,
+                                        render_kw=integerfiles_style
     )
 
     choice_switcher = RadioField(
         'led_num',
-        [validators.Required()],
+        # [validators.Required()],
         choices=[('led_num_all', 'ALL'), ('led_num_single', 'SINGLE')], default=led_num_default,
         render_kw=style
     )
     led_select_fields = IntegerField(
         label="Led Num:", validators=[
-            validators.Required(),
+            # validators.Required(),
             validators.NumberRange(min=1, max=961)
         ],
         default=led_select,
@@ -183,14 +186,14 @@ class TestForm(Form):
     log.debug("led_mode_default:%s", led_mode_default)
     led_mode_switcher = RadioField(
         'Area_Mode',
-        [validators.Required()],
+        # [validators.Required()],
         choices=[('led_normal_mode', 'Normal'), ('led_area_mode', 'Area')], default=get_led_mode_default(),
         render_kw=style
     )
 
     led_total_width_fields = IntegerField(
         label="LED Total Width:", validators=[
-            validators.Required(),
+            # validators.Required(),
             validators.NumberRange(min=0, max=960),
         ],
         default=get_led_total_width_default(),
@@ -198,7 +201,7 @@ class TestForm(Form):
     )
     led_total_height_fields = IntegerField(
         label="LED Total Height:", validators=[
-            validators.Required(),
+            # validators.Required(),
             validators.NumberRange(min=0, max=960),
         ],
         default=get_led_total_height_default(),
@@ -206,7 +209,7 @@ class TestForm(Form):
     )
     led_area_startx_fields = IntegerField(
         label="LED_Area_StartX:", validators=[
-            validators.Required(),
+            # alidators.Required(),
             validators.NumberRange(min=0, max=960),
         ],
         default=get_led_area_startx_default(),
@@ -214,7 +217,7 @@ class TestForm(Form):
     )
     led_area_starty_fields = IntegerField(
         label="LED_Area_StartY:", validators=[
-            validators.Required(),
+            # validators.Required(),
             validators.NumberRange(min=0, max=960),
         ],
         default=get_led_area_starty_default(),
@@ -222,7 +225,7 @@ class TestForm(Form):
     )
     led_area_width_fields = IntegerField(
         label="LEDAreaWidth :", validators=[
-            validators.Required(),
+            # validators.Required(),
             validators.NumberRange(min=0, max=960),
         ],
         default=get_led_area_width_default(),
@@ -230,7 +233,7 @@ class TestForm(Form):
     )
     led_area_height_fields = IntegerField(
         label="LEDAreaHeight :", validators=[
-            validators.Required(),
+            # validators.Required(),
             validators.NumberRange(min=0, max=960),
         ],
         default=get_led_total_height_default(),
@@ -239,14 +242,14 @@ class TestForm(Form):
 
     led_current_gain_switcher = RadioField(
         'RGB Mode/Current Gain Mode',
-        [validators.Required()],
+        # [validators.Required()],
         choices=[('led_rgb_mode', 'RGB'), ('led_current_gain_mode', 'Current Gain')], default=get_led_protocol_default(),
         render_kw=style
     )
 
     led_red_gain_fields = IntegerField(
         label="LEDRGain : ", validators=[
-            validators.Required(),
+            # alidators.Required(),
             validators.NumberRange(min=0, max=15),
         ],
         default=get_led_red_gain_default(),
@@ -255,7 +258,7 @@ class TestForm(Form):
     )
     led_green_gain_fields = IntegerField(
         label="LEDGGain :", validators=[
-            validators.Required(),
+            # validators.Required(),
             validators.NumberRange(min=0, max=15),
         ],
         default=get_led_green_gain_default(),
@@ -264,7 +267,7 @@ class TestForm(Form):
     )
     led_blue_gain_fields = IntegerField(
         label="LEDBGain : ", validators=[
-            validators.Required(),
+            # validators.Required(),
             validators.NumberRange(min=0, max=15),
         ],
         default=get_led_blue_gain_default(),

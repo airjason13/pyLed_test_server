@@ -1,4 +1,4 @@
-VERSION = "LT_20220217_001"
+VERSION = "LT_20220914_001"
 mp4_extends = '*.mp4'
 gif_extends = '*.gif'
 SIZE_MB = 1024*1024
