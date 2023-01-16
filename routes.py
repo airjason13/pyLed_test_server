@@ -159,11 +159,11 @@ class TestForm(Form):
     led_num_default = get_led_num_default()
     print("in TestForm, led_num_default:", led_num_default)
     led_brightness_fields = IntegerField(label="Led Brightness:",
-                                         _name="Led Brightness:",
+                                         # name="Led Brightness:",
                                          validators=[
                                                     # validators.Required(),
                                                     validators.NumberRange(min=0, max=255)
-                                                ],
+                                                    ],
                                          default=br_value,
                                         render_kw=integerfiles_style
     )
@@ -382,8 +382,6 @@ def LED_NUM():
         list_br_value = request.form.getlist('led_brightness_fields')
         br_value = list_br_value[0]
         send_message(set_br="br_value:" + br_value)
-        # status_code = Response(status=200)
-        # return status_code
         return render_template("index.html", title=title, form=testform)
 
     log.debug("led_color : %s", led_color)
